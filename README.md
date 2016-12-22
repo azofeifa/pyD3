@@ -27,10 +27,13 @@ Note you can set lbls, sizes,colors and alphas all equal to single value in whic
 ```
 ax.scatter(x,y,lbls="", size=10, color="red",alpha=1.0)
 ```
-To save the associated HTML file with D3 mouseover capabilities:
+To save the associated HTML file.
 ```
 ax.savefig("path/to/whatever.html")
 ```
+Now importantly, this whatever.html has some basic interactive functionality: mouse over of scatter points. When a scatter point is touched, it will double in radius and a the associated label will appear; along with its x and y coordinates! All figure axes come with drag and zoom capabilities as well. So that's kinda neet! 
+
+
 You can call ax.show() to just open that html file in the default browser (only supported for linux/mac OS. Below is a screen shot of path/to/whatever.html.
 
 ![Alt text](https://github.com/azofeifa/pyD3/blob/master/images/ScatterShot.jpeg)
@@ -41,7 +44,6 @@ ax.set_xlabel("N", fontsize=20)
 ax.set_ylabel("MD Score", fontsize=30)
 ```
 
-All figure axes come with drag and zoom capabilities as well. So that's kinda neet! 
 
 
 
