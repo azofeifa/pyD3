@@ -35,6 +35,13 @@ You can call ax.show() to just open that html file in the default browser (only 
 
 ![Alt text](https://github.com/azofeifa/pyD3/blob/master/images/ScatterShot.jpeg)
 
+Last but not least you can set x axis and y-axis labels as such
+```
+ax.set_xlabel("N", fontsize=20)
+ax.set_ylabel("MD Score", fontsize=30)
+```
+
+All figure axes come with drag and zoom capabilities as well. So that's kinda neet! 
 
 
 
