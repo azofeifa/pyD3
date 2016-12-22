@@ -27,6 +27,22 @@ Note you can set lbls, sizes,colors and alphas all equal to single value in whic
 ```
 ax.scatter(x,y,lbls="", size=10, color="red",alpha=1.0)
 ```
+To save the associated HTML file with D3 mouseover capabilities:
+```
+ax.savefig("path/to/whatever.html")
+```
+You can call ax.show() to just open that html file in the default browser (only supported for linux/mac OS. Below is a screen shot of path/to/whatever.html.
+
+![Alt text](https://github.com/azofeifa/pyD3/blob/master/images/Example_Snapshot.png)
+
+
+
+
+
+
+
+
+
 
 
 
