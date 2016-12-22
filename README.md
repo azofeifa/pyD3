@@ -8,7 +8,7 @@ This library hopes to be a python wrapper for D3. In this way, pyD3 takes in as 
 ## scatter
 First create some data
 ```
-import HTML
+from pyD3 import HTML
 
 x = range(5)
 y = [i+random.uniform(0,1)  for i in x]
@@ -20,6 +20,7 @@ sizes  = [10,1,4,7,100]
 colors = ["red", "steelblue", "green", "green", "red"]
 alphas = [1.0,1.0,0.7,0.8,0.1]
 
+ax     = HTML.axes()
 ax.scatter(x,y,lbls=labels, size=sizes, color=colors,alpha=alphas)
 
 ```
