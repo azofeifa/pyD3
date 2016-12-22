@@ -33,7 +33,7 @@ ax.savefig("path/to/whatever.html")
 ```
 You can call ax.show() to just open that html file in the default browser (only supported for linux/mac OS. Below is a screen shot of path/to/whatever.html.
 
-![Alt text](https://github.com/azofeifa/pyD3/blob/master/images/Example_Snapshot.png)
+![Alt text](https://github.com/azofeifa/pyD3/blob/master/images/ScatterShot.jpeg)
 
 
 
