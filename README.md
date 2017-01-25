@@ -34,7 +34,7 @@ ax.set_ylabel("Something Y",fontsize=20)
 LBL 	= "ABCDEFGHIJKLMNOP"
 ax.set_xticklabels([ LBL[i%10] for i in range(D.shape[0]) ])
 '''
-  do we want to display then
+  do we want to display them
 '''
 ax.set_show_labels(var=True)
 '''
@@ -57,8 +57,25 @@ ax.show()
 ```
 to open it in a browser.
 
-
 ![Alt text](https://github.com/azofeifa/pyD3/blob/master/images/BarShot.jpeg)
+
+Apart from a few other features, you can mouse over a specific rectangle and get a short little description about the data it is representing. 
+
+A common occurrence though is if we had a multiple observations and a few measurments or features associated with each observation. Take for example, a netflix user. we might information like name (this would be good for the set_xticklabels function, number of hours watched on Orange is the New Black, The Office etc.. In this way, we would make a matrix not a row vector. To page through each of these features, a drop down menu will appear in the upper left for which you can select The Office and the graph will adjust accordingly! 
+
+
+```
+ax = HTML.axes()
+D  = np.random.uniform(0,10,size=(10,3) )
+series = [ "Series "+ LBL[i%10] for i in range(D.shape[1]) ]
+
+ax.bar(D,series_labels=series)
+
+```
+
+
+
+
 
 
 
