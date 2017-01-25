@@ -8,7 +8,7 @@ This library hopes to be a python wrapper for D3. In this way, pyD3 takes in as 
 ## scatter
 First create some data
 ```
-import HTML
+from pyD3 import HTML
 
 x = range(5)
 y = [i+random.uniform(0,1)  for i in x]
@@ -20,6 +20,7 @@ sizes  = [10,1,4,7,100]
 colors = ["red", "steelblue", "green", "green", "red"]
 alphas = [1.0,1.0,0.7,0.8,0.1]
 
+ax     = HTML.axes()
 ax.scatter(x,y,lbls=labels, size=sizes, color=colors,alpha=alphas)
 
 ```
@@ -27,28 +28,34 @@ Note you can set lbls, sizes,colors and alphas all equal to single value in whic
 ```
 ax.scatter(x,y,lbls="", size=10, color="red",alpha=1.0)
 ```
-To save the associated HTML file with D3 mouseover capabilities:
+To save the associated HTML file.
 ```
 ax.savefig("path/to/whatever.html")
 ```
+Now importantly, this whatever.html has some basic interactive functionality: mouse over of scatter points. When a scatter point is touched, it will double in radius and the associated label (from lables in the above example) will appear; along with its x and y coordinates! All figure axes come with drag and zoom capabilities as well.  
+
+
 You can call ax.show() to just open that html file in the default browser (only supported for linux/mac OS. Below is a screen shot of path/to/whatever.html.
 
 ![Alt text](https://github.com/azofeifa/pyD3/blob/master/images/ScatterShot.jpeg)
 
-
-
-
-
-
-
-
-
-
-
-
-
+Last but not least you can set x axis and y-axis labels as such
+```
+ax.set_xlabel("N", fontsize=20)
+ax.set_ylabel("MD Score", fontsize=30)
+```
 
 
 ## plot
-
+under development stay tuned
 ## bar
+under development stay tuned
+
+
+
+
+
+
+
+
+
