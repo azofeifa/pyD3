@@ -57,7 +57,7 @@ ax.show()
 ```
 to open it in a browser.
 
-![Alt text](https://github.com/azofeifa/pyD3/blob/master/images/BarShot)
+![Alt text](https://github.com/azofeifa/pyD3/blob/master/images/BarShot.png)
 
 Apart from a few other features, you can mouse over a specific rectangle and get a short little description about the data it is representing. 
 
