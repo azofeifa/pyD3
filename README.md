@@ -18,9 +18,34 @@ So now we have some really simple data that we'd like to visualize. The big thin
 import HTML
 ax = HTML.axes()
 ```
-ax now has axes to a lot (and by a lot I mean the more popular) methods that a matplotlib axes would have axes to. Stuff like set_title(str, font_size=10),set_xticklabeles([str,...,str], font_size=10) etc. A full description of the axes methods are listed below.
+ax now has access to some of the familar methods that a matplotlib axes would have acesses to. Stuff like set_title(str, font_size=10),set_xticklabeles([str,...,str], font_size=10) etc. A full description of the axes methods at the bottom of this page.
 ```
+
 ax.bar(y)
+'''
+  set the x and y axis labels?
+'''
+ax.set_xlabel("Something X",fontsize=20)
+ax.set_ylabel("Something Y",fontsize=20)
+
+'''
+  set the xticklabels?
+'''
+LBL 	= "ABCDEFGHIJKLMNOP"
+ax.set_xticklabels([ LBL[i%10] for i in range(D.shape[0]) ])
+'''
+  do we want to display then
+'''
+ax.set_show_labels(var=True)
+'''
+  pad between adjacent bars
+'''
+ax.set_pad(10)
+'''
+  put on a title?
+'''
+ax.set_title("Some title",fontsize=40)
+
 ```
 Now in order to render this is as an HTML file you need to call
 ```
@@ -31,6 +56,11 @@ and then you can call
 ax.show()
 ```
 to open it in a browser.
+
+
+![Alt text](https://github.com/azofeifa/pyD3/blob/master/images/BarShot.jpeg)
+
+
 
 
 
