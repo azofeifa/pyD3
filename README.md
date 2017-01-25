@@ -61,7 +61,7 @@ to open it in a browser.
 
 Apart from a few other features, you can mouse over a specific rectangle and get a short little description about the data it is representing. 
 
-A common occurrence though is if we had a multiple observations and a few measurments or features associated with each observation. Take for example, a netflix user. we might information like name (this would be good for the set_xticklabels function, number of hours watched on Orange is the New Black, The Office etc.. In this way, we would make a matrix not a row vector. To page through each of these features, a drop down menu will appear in the upper left for which you can select The Office and the graph will adjust accordingly! 
+A common occurrence though is if we had a multiple observations and a few measurments or features associated with each observation. Take for example, a netflix user. We might have information like name (this would be good for the set_xticklabels function), number of hours watched on Orange is the New Black, The Office etc.. In this way, we would make a matrix not a row vector. To page through each of these features, a drop down menu will appear in the upper left for which you can select The Office and the graph will adjust accordingly! 
 
 
 ```
