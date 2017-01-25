@@ -4,6 +4,40 @@ This library hopes to be a python wrapper for D3. In this way, pyD3 takes in as 
 ```
   git clone https://github.com/azofeifa/pyD3/
 ```
+# Usage
+
+## bar
+First create some data to display as a bar chart. 
+'''
+import numpy as np
+y = np.random.uniform(0,1,7)
+'''
+
+So now we have some really simple data that we'd like to visualize. The big thing when using any of these modules (bar,scatter, hmap) is that you have to create an axes object from the HTML module
+'''
+import HTML
+ax = HTML.axes()
+'''
+ax now has axes to a lot (and by a lot I mean the more popular) methods that a matplotlib axes would have axes to. Stuff like set_title(str, font_size=10),set_xticklabeles([str,...,str], font_size=10) etc. A full description of the axes methods are listed below.
+'''
+ax.bar(y)
+'''
+Now in order to render this is as an HTML file you need to call
+'''
+ax.savefig("path/to/some/file.html)
+'''
+and then you can call
+'''
+ax.show()
+'''
+to open it in a browser.
+
+
+
+
+
+
+
 
 ## scatter
 First create some data
