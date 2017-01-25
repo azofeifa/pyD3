@@ -1,0 +1,289 @@
+	
+			<!DOCTYPE html>
+				<html>
+				  <head>
+				    <meta charset="utf-8">
+				    <title>pyD3</title>
+				    <!-- <link rel="stylesheet" href="scatter.css" charset="utf-8"> -->
+				  </head>
+				  <body>
+				    <div id="scatter"></div>      
+				        <style>
+				            .toolTip {
+				              position: absolute;
+				              display: none;
+				              height: auto;
+				              background: none repeat scroll 0 0 #ffffff;
+				              background: rgba(0, 0, 0, 0.8);
+				              color: #fff;
+				              line-height: 1;
+				              font-weight: bold;
+				              padding: 6px;
+				              font-size: 10px;
+
+				              border-radius: 2px;
+				              text-align: left;
+				              content: "BC";
+				            }
+				        </style>
+
+				    <script src="https://d3js.org/d3.v4.js"></script>
+				    <script>
+		var data=[[0.39399747672889673, 9.7731772575508824, 3.465628221192627, 0.061846476993764332, 2.9881031359977852, 4.0902742141516164, 0.93920440588420306, 'steelblue'], [6.6892745339530046, 0.76806891012917045, 5.1101928523105542, 1.1027551766962018, 0.94878274723003142, 3.6213947603073935, 5.1444197525049642, 'steelblue'], [4.1221184766553982, 2.0475007092425725, 1.6385131631679684, 2.6440004984780119, 8.0175706454998483, 4.1262943012863698, 5.8380885178459376, 'steelblue'], [8.9680441433210696, 7.785783130141005, 2.882424418230217, 5.8087104459223582, 4.415958705987423, 5.0284528184975317, 9.0367933070947402, 'steelblue'], [1.463935369660665, 1.6039950124087843, 6.8936660230727735, 3.0977615632553226, 7.0994798969091804, 8.0568813049879768, 6.5918935706619743, 'steelblue'], [1.8288947079398843, 7.0193174401113447, 6.8222142064958593, 5.2216854243692437, 9.111410188290666, 9.6353134228118282, 3.96397761301961, 'steelblue'], [5.1522381675985853, 1.184803024709854, 5.4451272333617382, 5.9789998781642026, 6.873145043804584, 1.0552818419088483, 8.6386114177331947, 'steelblue'], [5.806038078590797, 8.734286477905016, 9.7412425816573673, 7.6668161085591846, 2.4272560245943851, 8.8769168329506076, 3.2983178683505923, 'steelblue'], [6.5809060681945972, 2.6402648621556879, 2.7455736816480805, 0.77274751589884727, 8.7335320097191165, 0.40642713969824773, 1.5716099755882151, 'steelblue'], [6.3954119415527071, 7.7178764789600987, 5.874440171154526, 9.6729481558056847, 4.2380893028505815, 0.13244505790087291, 7.0059402941719302, 'steelblue']];
+var xlabels=["0","1","2","3","4","5","6","7","8","9"];
+var xlabels_fontsize=2;
+var xlabels_rot=0;
+var ylabels=["Series D","Series E","Series F","Series G","Series H","Series I","Series J"];
+var ylabels_fontsize=2;
+var SHOW_LABELS=1;
+var pad=10;
+var tick_xN=10;
+var fontsize_ticks_x=20;
+var tick_yN=10;
+var fontsize_ticks_y=20;
+var yaxis_lbl="";
+var fontsize_label_y=30;
+var xaxis_lbl="";
+var fontsize_label_x=30;
+var xaxis_lbl="Something X";
+var fontsize_label_x=20;
+var yaxis_lbl="Something Y";
+var fontsize_label_y=20;
+var xlabels=["A","B","C","D","E","F","G","H","I","J"];
+var xlabels_fontsize=2;
+var xlabels_rot=0;
+var SHOW_LABELS=1;
+var pad=10;
+var title="Some title";
+var fontsize_title=30
+
+
+
+      var type    = 0
+      var min   = d3.min(data, function(d){ return  d[type]} );
+      var max   = d3.max(data, function(d){ return d[type] } );
+
+      var type_code = d3.map()      
+
+      ylabels.forEach(function(d,i){type_code.set(d,i) })
+
+
+      var outerWidth        = window.innerWidth,
+            outerHeight     = window.innerHeight,
+            Bottom          = 300,
+            Top             = 200;
+
+      var margin                  = { top: Top, right: 300, bottom: Bottom, left: 100 };                  
+                  width           = outerWidth - margin.left - margin.right,
+                  height          = outerHeight - margin.top - margin.bottom;
+
+      var dispatch = d3.dispatch("load", "statechange");
+      // A drop-down menu for selecting a state; uses the "menu" namespace.
+      dispatch.on("load.menu", function(ylabels) {
+
+        var select = d3.select("#scatter")
+                        .append("select")
+                        .style("border-width",0)
+                        .style("font-family","Times New Roman")
+                        .style("font-size",10)
+                        .on("change", function(DD) { 
+                          dispatch.call("statechange",this,this.value
+                          ); });
+
+        select.selectAll("option")
+            .data(ylabels)
+          .enter().append("option")
+            .attr("value", function(d) { return d; })
+            .text(function(d) { return d; })
+        
+        dispatch.on("statechange.menu", function(state) {
+            type=type_code.get(state);
+
+            rescale();
+
+
+            svg.selectAll("rect")
+              .transition()
+
+              .attr("y", function(d,i){
+                if ((d[type]) > 0){
+                  return  y(d[type])
+                }
+                return y(0)
+              })  
+
+              .attr("height", function(d,i){
+                if ((d[type]) > 0){
+                  return y(0)-y(d[type])
+                }
+                return y( d[type])-y(0)
+              })
+
+             return state
+        });
+        
+      });
+      dispatch.call("load", this,ylabels)
+      var svg = d3.select("#scatter")
+                  .append("svg")
+                  .attr("width", outerWidth)
+                  .attr("height", outerHeight)
+                  .append("g")
+                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+
+      var x           = d3.scaleLinear()
+                          .domain([-1, data.length])
+                          .range([ 0, width]) ;
+
+      var y           = d3.scaleLinear()
+                          .domain([Math.min(0,min),max])
+                          .range([height,0]) ;
+
+      svg.selectAll(".labelx")   
+          .style("font-size", fontsize_label_x + "px");
+
+      svg.selectAll(".labely")   
+          .style("font-size", fontsize_label_y + "px");
+
+
+      var wh  = width / (data.length+1)
+
+
+      var tooltip = d3.select("#scatter").append("div").attr("class", "toolTip");
+
+      var grp = svg.selectAll('g')
+              .data(data)
+              .enter()
+              .append('rect')
+              .attr("x", function(d,i){
+                return  x(i)-((wh-pad)/2)
+              })  
+              .attr("width", (wh)-pad)
+              .attr("fill", function(d,i){
+                return d[ylabels.length];
+              })
+              .on('mouseover',function(d,i){
+
+
+                  tooltip
+                      .html("Value: " + data[i][type]+ "<br>" +
+                            "Label: " + xlabels[i]   )
+                      .style("left", x(i)-(pad/2) + 100 + "px")
+                      .style("top", y(d[type])+170 + "px")
+                      .style("display", "inline-block")
+
+                                    
+
+                d3.select(this).transition()
+                    .duration(100)   
+                    .attr('fill', "grey")
+              })
+
+              .on('mouseout',function(d,i){
+                  tooltip
+                      .style("display", "none")
+
+                d3.select(this).transition()
+                    .duration(100)   
+                    .attr('fill', function(d,i){
+                      return d[ylabels.length];
+                    })
+
+              })
+
+              .attr("height",0)
+              .attr("y",y(0))
+                
+              .transition()
+              .duration(1000)
+              .ease(d3.easeBounce)
+              .attr("y", function(d,i){
+                if ((d[type]) > 0){
+                  return  y(d[type])
+                }
+                return y(0)
+              }).attr("height", function(d,i){
+                if ((d[type]) > 0){
+
+                  return y(0)-y(d[type])
+                }
+                return y( d[type])-y(0)
+              })
+                
+      // draw the x axis
+      var xAxis = d3.axisBottom(x).tickSize(1).ticks(tick_xN)
+
+      // draw the y axis
+      var yAxis = d3.axisLeft(y).tickSize(1).ticks(tick_yN);
+
+      gX  = svg.append("g")
+                .classed("x axis", true)
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis)
+      gX.style("font-size", fontsize_ticks_x)
+          .append("text")
+          .classed("labelx", true)
+          .attr("x", width)
+          .attr("y", height)
+
+      /*
+        yaxis and y font tick size
+      */ 
+
+      gY  = svg.append("g")
+          .classed("yaxis", true)
+          .call(yAxis)
+
+      gY.style("font-size", fontsize_ticks_y)
+          .append("text")
+          .classed("labely", true)
+          .attr("x", 0)
+          .attr("y", -margin.bottom/1.5 )
+          .attr("transform", "rotate(-90)")
+      svg.append("text").attr("class", "y label") 
+          .attr("transform", "translate("+-margin.left/2 +","+ height/2 + ")rotate(-90)")
+          .attr("text-anchor", "middle") 
+          .style("font-size", fontsize_label_y)
+          .text(yaxis_lbl)
+
+      svg.append("text").attr("class", "y label") 
+          .attr("transform", "translate("+width/2 +","+ (height+(margin.left)) + ")rotate(0)")
+          .attr("text-anchor", "middle") 
+          .style("font-size", fontsize_label_x)
+          .text(xaxis_lbl)
+      gX.selectAll("text").text("")
+      if (SHOW_LABELS){
+          gX.selectAll("text").text(function(i){
+            if (i < 0 || i > xlabels.length){
+              return ""
+            }
+            return xlabels[i];
+          })
+          .attr("transform", "translate(0,10)rotate(" + xlabels_rot+ ")" )
+          .style("text-anchor", "start") 
+      }
+		svg.append("text")
+					.attr("x", (width / 2))             
+					.attr("y", 0 - (margin.top / 2))
+					.attr("text-anchor", "middle")  
+					.style("font-size", fontsize_title) 
+					.text(title);
+
+      function rescale() {
+
+            var min   = d3.min(data, function(d){ return  d[type]} );
+            var max   = d3.max(data, function(d){ return d[type] } );
+
+            y.domain([Math.min(0,min),max]).range([height,0])  // change scale to 0, to between 10 and 100
+            var yAxis = d3.axisLeft(y).tickSize(1).ticks(tick_yN);
+            svg.select("g.yaxis").call(yAxis)
+
+        }
+
+
+		    </script>
+		  </body>
+		</html>
+
+		

@@ -1,19 +1,27 @@
 from math import isnan,isinf
 from templates import temp
-import os
-'''
-Current js options
+import os,numpy as np,pandas as pd
+class option:
+	def __init__(self, identifier , data, Type):
+		self.identifier 	= identifier
+		self.data 	= data
+		self.type 	= Type
+	def write(self):
+		STR = "var " + self.identifier + "="
+		if self.type=="list":
+			f 	= lambda x : "\"" +str(x)+ "\"" 
+			return STR+ "[" + ",".join(map(f, self.data)) + "]"
+		elif self.type=="numerical":
+			return STR+str(self.data)
+		elif self.type=="string":
+			return STR+"\""+str(self.data)+"\""
 
-var yaxis_lbl           = "Y-axis-1111",
-    xaxis_lbl           = "X-axis-val",
-    font_label_x        = 25,
-    font_label_y        = 25,
-    font_ticks_x        = 20,
-    font_ticks_y        = 20,
-    tick_xN             = 10,
-    tick_yN             = 10;
+		print "Warning option: ", self.data, " was not given a type"
+		return ""
 
-'''
+
+
+
 class axes:
 	def __init__(self,facecolor="white",grid=False):
 		self.facecolor 	= facecolor
@@ -25,33 +33,95 @@ class axes:
 		self.SCATTER 		= False
 		self.PLOT  			= False
 		self.BAR 			= False
+		self.HMAP 			= False
 		self.T 				= temp()
 
-		self.params["xaxis_lbl"] 			= "";		self.params["yaxis_lbl"] 			= ""
-		self.params["fontsize_label_x"] 	= "25";	self.params["fontsize_label_y"] 	= "25"
-		self.params["fontsize_ticks_x"] 	= "20"; 	self.params["fontsize_ticks_y"] 		= "20"
-		self.params["tick_xN"] 				="10"; 	self.params["tick_yN"] 				= "10"
-		self.params["title"] 				= "";    self.params["fontsize_title"] 	= "10"
+		'''
+			D is the raw python data input
+			data is the string converted for javascript
+		'''
+		self.D 				= None
+		self.data 			= None
+
+		self.available=dict([(c,1) for c in ("green", "red", "blue", "purple", "black", "grey", "yellow", "orange")])
+
+
+		self.options 	= list()
+
 	def __str__(self):
 		return "pyD3 axes object"
 	def __del__(self):		
 		pass
-	def set_title(self, lbl, fontsize=10):
-		self.params["title"] 	= lbl
+	'''
+		this data will largely be shared regardless of module
+	'''
+	def set_title(self, lbl, fontsize=30):
+		self.options.append(option("title", lbl, "string"))
+		self.options.append(option("fontsize_title",fontsize, "numerical"))
+	def set_xlabel(self, lbl, fontsize=30):
+		self.options.append(option("xaxis_lbl", lbl, "string"))
+		self.options.append(option("fontsize_label_x",fontsize, "numerical"))
+	def set_ylabel(self, lbl, fontsize=30):
+		self.options.append(option("yaxis_lbl", lbl, "string"))
+		self.options.append(option("fontsize_label_y",fontsize, "numerical"))
+	
+	'''
+		right now scatter() specific
+	'''
 
-	def set_xlabel(self, lbl, fontsize=10):
-		self.params["xaxis_lbl"] 			= lbl
-		self.params["fontsize_label_x"] 	= fontsize
-	def set_ylabel(self, lbl, fontsize=10):
-		self.params["yaxis_lbl"] 			= lbl
-		self.params["fontsize_label_y"] 	= fontsize
-	def set_xtick_res(self, N, fontsize=10):
-		self.params["tick_xN"] 				= N
-		self.params["fontsize_ticks_x"] 	= fontsize
-	def set_ytick_res(self, N, fontsize=10):
-		self.params["tick_yN"] 				= N
-		self.params["fontsize_ticks_y"] 	= fontsize
+	def set_xtick_res(self, N, fontsize=20):
+		self.options.append(option("tick_xN", N, "numerical"))
+		self.options.append(option("fontsize_ticks_x",fontsize, "numerical"))
+	def set_ytick_res(self, N, fontsize=20):
+		self.options.append(option("tick_yN", N, "numerical"))
+		self.options.append(option("fontsize_ticks_y",fontsize, "numerical"))
 
+	'''
+		right now hmap() specific
+	'''
+	def set_xticklabels(self,lbls,fontsize=2,rot=0):
+		'''
+			check to make sure row labels are the same dimension 
+			as the input matrix
+		'''
+		if self.HMAP and self.D is None:
+			print "please call hmap() with a valid input matrix"
+			return -1
+		elif self.HMAP and self.D.shape[0]!=len(lbls) and len(lbls):
+			print "your input size for the row labels does not equal"
+			print "your row dimension of the matrix"
+			return -1
+		self.options.append(option("xlabels", lbls, "list"))
+		self.options.append(option("xlabels_fontsize", fontsize, "numerical"))
+		self.options.append(option("xlabels_rot",rot, 'numerical'))
+	def set_column_labels(self,lbls,fontsize=2):
+		'''
+			check to make sure row labels are the same dimension 
+			as the input matrix
+		'''
+		if self.HMAP and self.D is None:
+			raise TypeError, "please call hmap() with a valid input matrix"
+			return -1
+		elif self.HMAP and self.D.shape[1]!=len(lbls) and len(lbls):
+			raise TypeError, "your input size for the row labels does not equal\nyour row dimension of the matrix"
+		self.options.append(option("ylabels", lbls, "list"))
+		self.options.append(option("ylabels_fontsize", fontsize, "numerical"))
+	def set_show_labels(self,var=0):
+		self.options.append(option("SHOW_LABELS", int(var), "numerical"))
+	def set_cmap(self, cmap):
+		if cmap not in self.available:
+			print "cmap color specified is not available only: "+ ", ".join(self.available.keys())
+			return -1
+		self.options.append(option("color", cmap, "string"))
+	def set_aspect(self, lbl):
+		if lbl in ("stretch", "square"):
+			self.aspect 	= lbl
+			self.options.append(option("aspect", lbl, "string"))
+		else:
+			print "unrecognized option for aspection"
+			return -1
+	def set_pad(self, value):
+		self.options.append(option("pad", value, "numerical"))
 
 	def _get_list(self, arg):
 		if hasattr(arg, "__iter__"): #compare to self.N
@@ -64,8 +134,52 @@ class axes:
 		if val is None:
 			assert False, error
 		return True
+	def _is_num(self,x):
+		if isnan(x) or isinf(x):
+			return False
+		return True
 
-	def scatter(self, xs,ys,lbls="", alpha=1.0, color="steelblue", size=5.0):
+	def hmap(self, D,cmap="green",SHOW_LABELS=0,row_labels=[],
+					col_labels=[],aspect="stretch",pad=1.0,xlabel="", ylabel=""):
+		'''
+			check to make sure this can be converted to numpy array
+		'''
+
+		try:
+			D 	= np.array(D)
+		except:
+			raise TypeError, "can not interpret shape of input matrix"
+
+		'''
+			check to make sure everything is finite and not nan
+		'''
+		if len([1 for i in range(D.shape[0]) for j in range(D.shape[1]) if not self._is_num(D[i,j])]) >0:
+			raise TypeError, "one or more numbers is nan or not finite"
+		if cmap not in self.available:
+			raise TypeError, "cmap color specified is not available only: "+ ", ".join(self.available.keys())
+
+		'''
+			check the labels
+		'''
+		if len(row_labels) and len(row_labels)!=D.shape[0]:
+			print "xlabels were specified but they do not equal the row dimension" 
+			return -1
+		self.D 		= D
+		self.data 	= str([[i for i in x] for x in D])
+		self.HMAP 	= True
+
+		self.set_xticklabels(row_labels)
+		self.set_column_labels(col_labels)
+		self.set_show_labels(var=SHOW_LABELS)
+	
+		self.set_cmap(cmap)
+		self.set_aspect(aspect)
+		self.set_pad(pad)
+		self.set_xlabel(xlabel)
+		self.set_ylabel(ylabel)
+
+	def scatter(self, xs,ys,lbls="", alpha=1.0, color="steelblue", 
+						size=5.0,title="",tick_xN=10,tick_yN=10,xlabel="",ylabel=""):
 		'''
 			check to make sure these are iterable
 		'''
@@ -107,12 +221,72 @@ class axes:
 
 		xs,ys 		= map("{0:.3f}".format,xs),map("{0:.3f}".format,ys)
 		xs,ys 		= map(float,xs), map(float, ys)
+
+		self.set_title(title)
+		self.set_xtick_res(tick_xN)
+		self.set_ytick_res(tick_yN)
+		self.set_xlabel(xlabel)
+		self.set_ylabel(ylabel)
 		self.data 	= str([ [xs[i], ys[i], self.lbls[i],self.color[i],self.alpha[i],self.size[i]] for i in range(self.N)])
 		self.SCATTER= True 
 	def plot(self):
 		print "currently in development"
-	def bar(self):
-		print "currently in development"
+	def bar(self, D, xlabels=[], 
+						series_labels=[],pad=10, color="steelblue",SHOW_xlabels=True):
+		'''
+			check to see if this is a pandas dataframe
+		'''
+		if type(D) is pd.core.frame.DataFrame:
+			Series_labels 	= list(D.columns)
+			
+			Series_labels 	= [s for s in Series_labels if sum([ isinstance(i, (int, long, float)) for i in D[s]    ]) == D.shape[0]  ]
+			A 					= D[Series_labels].as_matrix()
+			if xlabels in list(D.columns):
+				xlabels 	= list(D[xlabels])
+			elif type(xlabels)!=list :
+				print "Warning: " + str(xlabels) +" was not found in pandas dataframe object"
+				xlabels 	= range(D.shape[0])
+			if type(series_labels) == list and len(series_labels):
+				print "Warning: Overwriting DataFrame attribute ids to specified series_labels" 
+			else:
+				series_labels 	= Series_labels
+
+		else:
+			A 	= D
+
+		'''
+			check the x label dimensions
+		'''
+		if type(xlabels)==list and len(xlabels) > 0 and len(xlabels)!= A.shape[0] :
+			raise TypeError, "xlabels specified as a list but does not equal the dimension of dataframe/input array" 
+		elif type(xlabels)==list and len(xlabels) == 0:
+			xlabels 	= range(A.shape[0])
+		'''
+			check the y/series label dimensions
+		'''
+		if not len(series_labels):
+			series_labels 	= ["Series " + str(i+1) for i in range(A.shape[1])]
+		elif type(series_labels)==list and len(series_labels)!= A.shape[1]:
+			raise TypeError, "series_labels was specified as a list but does not equal the column dimension of dataframe/input array" 
+		if type(color)==list and len(color)==A.shape[0]:
+			A 	= [ [ A[i,j] for j in range(A.shape[1]) ] + [color[i]] for i in range(A.shape[0]) ]
+		elif type(color)==str:
+			A 	= [ [ A[i,j] for j in range(A.shape[1]) ] + [color] for i in range(A.shape[0]) ]
+		elif type(color)==list and len(color)!=A.shape[0]:
+			raise TypeError, "color was specified as a list but does not equal the dimension of dataframe/input array"
+
+		self.set_xticklabels(xlabels)
+		self.set_column_labels(series_labels)
+		self.set_show_labels(var=int(SHOW_xlabels))
+		self.set_pad(pad)
+		self.set_xtick_res(len(xlabels))
+		self.set_ytick_res(10)
+		self.set_ylabel("")
+		self.set_xlabel("")
+		self.BAR 	= True
+		self.data 	= str(A)
+
+
 	def savefig(self, path_to_file):
 		self.html 	= path_to_file
 		try:
@@ -122,17 +296,56 @@ class axes:
 		assert FHW is not None, "could not open for writing: " + path_to_file
 		if path_to_file.split(".")[-1]!="html":
 			path_to_file+=".html"
-		assert self.SCATTER or self.PLOT or self.BAR, "need to call either scatter(), bar(), or plot() first"
-		FHW.write(self.T.first_part())
+		assert self.SCATTER or self.PLOT or self.BAR or self.HMAP, "need to call either scatter(), bar(), or plot() first"
+		FHW.write(self.T.first_part(scatter=self.SCATTER, hmap=self.HMAP,bar=self.BAR))
 		FHW.write("var data="+self.data+";\n")
-		FHW.write("var " + ",".join([str(x) + "=" +"\""+ str(y)+"\"" for x,y in zip(self.params.keys(), self.params.values())  ])+";\n" )
-		if self.SCATTER:
-			FHW.write(self.T.second_part_scatter())
+
+		FHW.write(";\n".join([o.write() for o in self.options]))
+		FHW.write(self.T.second_part(scatter=self.SCATTER, hmap=self.HMAP,bar=self.BAR))
 	def show(self):
 		os.system("open " + self.html)
 
 
+def main_hmap():
+	ax 	= axes()
+	D 		= np.random.uniform(0,1,size=(20,10))
 
+
+	ax.hmap(D,pad=1,aspect="stretch",cmap="blue")
+
+	ax.set_xlabel("Something Cool",fontsize=30)
+	ax.set_ylabel("Something Cool 2",fontsize=30)
+	#ax.set_show_labels(var=1)
+	ax.savefig("test.html")
+	ax.show()
+def main_scatter():
+	ax 	= axes()
+	xs 	= np.random.uniform(0,1,100)
+	ys 	= xs + np.random.normal(0,0.1,len(xs))
+	ax.scatter(xs,ys)
+	ax.set_xtick_res(10,fontsize=20)
+	ax.set_ytick_res(10,fontsize=20)
+	ax.savefig("test.html")
+	ax.show()
+def main_bar():
+	LBL 	= "ABCDEFGHIJKLMNOP"
+	ax 	= axes()
+	D 		= np.random.uniform(0,10,size=(10,13))
+	df 	= pd.DataFrame(D, columns=[ "Series "+ LBL[i%10] for i in range(D.shape[1]) ])
+	ax.bar(df)
+	ax.set_xlabel("Something X",fontsize=20)
+	ax.set_ylabel("Something Y",fontsize=20)
+	ax.set_xticklabels([ LBL[i%10] for i in range(D.shape[0]) ])
+	ax.set_show_labels(var=True)
+	ax.set_pad(10)
+	ax.set_title("Some title")
+	ax.savefig("test.html")
+	ax.show()
+
+if __name__ == "__main__":
+	#main_hmap()
+	#main_scatter()
+	main_bar()
 
 
 

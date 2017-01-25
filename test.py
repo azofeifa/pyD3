@@ -1,18 +1,17 @@
 import HTML
 import random
 import sys
-
-def main():
+import numpy as np
+def main_scatter():
 	ax 	= HTML.axes()
 
-	x 		= range(5)
-	y 		= [i+random.uniform(-10,10)  for i in x]
-	labels = ["A", "B", "C", "D","E"]
-	sizes  = [10,1,4,7,100]
-	colors = ["red", "steelblue", "green", "green", "red"]
-	alphas = [1.0,1.0,0.7,0.8,0.1]
+	x 			= range(15)
+	y 			= [i+random.uniform(-1,1)  for i in x]
+	labels 	= ["This is: " + str(i) for i in range(15)]
+	
+	sizes  	= np.random.uniform(0,1,15)*10
 
-	ax.scatter(x,y,lbls=labels, size=sizes, color=colors,alpha=alphas)
+	ax.scatter(x,y,lbls=labels, size=sizes)
 
 	ax.set_xlabel("N",fontsize=30)
 	ax.set_xtick_res(25,fontsize=20)
@@ -21,6 +20,18 @@ def main():
 	ax.show()
 	
 	return True
-	
+def main_hmap():
+	ax 	= HTML.axes()
+	D 		= np.random.uniform(0,1,size=(20,6))
+
+def main():
+	test_scatter 	= False
+	test_hmap 		= True
+	if test_hmap:
+		main_hmap()
+
+	if test_scatter:
+		main_scatter()
+
 if __name__ == "__main__":
 	main()

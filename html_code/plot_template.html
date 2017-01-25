@@ -1,0 +1,292 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Visualization</title>
+    <!-- <link rel="stylesheet" href="scatter.css" charset="utf-8"> -->
+  </head>
+  <style>
+    div.tooltip { 
+      position: absolute; 
+      display:inline-block;    
+      text-align: center;     
+      padding: 5px;       
+      font: 16px sans-serif #FFFFFF;    
+      background: #282828 ; 
+      color: #FFFFFF;
+    }
+    rect {
+      fill: transparent;
+      shape-rendering: crispEdges;
+    }
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: rgba(0, 0, 0, 0.1);
+      shape-rendering: crispEdges;
+    }
+    .line {
+      fill: none;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+      stroke-opacity: 0.2;
+    }
+    .line--hover {
+      stroke-opacity: 1.0;
+    }
+
+    .axisLine {
+      fill: none;
+      shape-rendering: crispEdges;
+      stroke: rgba(0, 0, 0, 0.5);
+      stroke-width: 2px;
+    }
+    circle {
+      fill: steelblue;
+    }
+      .voronoi path {
+      fill: none;
+      pointer-events: all;
+      stroke: red;
+      stroke-opacity: 0.0;
+    }
+
+  </style>
+
+  <body>
+    <div id="scatter"></div>      
+    <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script>
+     
+
+                          //xs,ys, color, alpha, stroke width
+      var data        = [
+                          [ [500,100],[700,800],[760,550],[900,100] ],
+                          [ [400,600],[500,400],[560,850],[900,300] ]
+                        ];
+
+
+
+
+
+
+      var data       = data.map(function(d){ 
+                                    return d.map(function(z){ return {"x":z[0], "y":z[1],"line":"" };} )  ;
+                              })
+
+
+
+      var yaxis_lbl           = "Y-axis-1111",
+          xaxis_lbl           = "X-axis-val",
+          fontsize_label_x    = 25,
+          fontsize_label_y    = 25,
+          fontsize_ticks_x    = 20,
+          fontsize_ticks_y    = 20,
+          tick_xN             = 10,
+          tick_yN             = 10;
+
+
+
+      var margin                  = { top: 50, right: 100, bottom: 100, left: 100 },
+                  outerWidth      = window.innerWidth,
+                  outerHeight     = window.innerHeight,
+                  width           = outerWidth - margin.left - margin.right,
+                  height          = outerHeight - margin.top - margin.bottom;
+
+      function MAX(arrays, i){
+        var max = d3.max(arrays, function(array) {
+            return d3.max(array, function(d){return d[i]});
+        });
+        return max;
+      }
+      function MIN(arrays, i){
+        var min = d3.min(arrays, function(array) {
+            return d3.min(array, function(d){return d[i]});
+        });
+        return min;
+      }
+
+
+      var xMin        = MIN(data,"x");
+      var xMax        = MAX(data,"x");
+
+      var yMin        = MIN(data,"y");
+      var yMax        = MAX(data,"y");
+
+      var voronoi = d3.voronoi()
+                      .x(function(d) { return x(d.x); })
+                      .y(function(d) { return y(d.y); })
+                      .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]]);
+
+
+
+      var Rx          = 0.05*(xMax - xMin),Ry=0.05*(yMax - yMin)
+
+      var x           = d3.scaleLinear()
+                          .domain([xMin-Rx, xMax+Rx])
+                          .range([ 0, width ]) ;
+
+      var y           = d3.scaleLinear()
+                          .domain([yMin-Ry, yMax+Ry] )
+                          .range([ height, 0 ]) ;
+
+      var zoomBeh = d3.zoom()
+                      .scaleExtent([0, 500])
+                      .on("zoom", zoom);
+
+      var svg = d3.select("#scatter")
+                  .append("svg")
+                  .attr("width", outerWidth)
+                  .attr("height", outerHeight)
+                  .append("g")
+                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                  .call(zoomBeh);
+
+
+
+      // draw the x axis
+      var xAxis = d3.axisBottom(x).tickSize(-height).ticks(tick_xN)
+
+      // draw the y axis
+      var yAxis = d3.axisLeft(y).tickSize(-width).ticks(tick_yN);
+
+      /*
+        xaxis and x font tick size
+      */ 
+
+      gX  = svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .classed("x axis", true)
+                .call(xAxis)
+      gX.style("font-size", fontsize_ticks_x)
+          .append("text")
+          .classed("labelx", true)
+          .attr("x", width)
+          .attr("y", margin.bottom/1.5)
+          .style("text-anchor", "end")
+          .text(xaxis_lbl);
+
+      /*
+        yaxis and y font tick size
+      */ 
+
+      gY  = svg.append("g")
+          .classed("y axis", true)
+          .call(yAxis)
+
+      gY.style("font-size", fontsize_ticks_y)
+          .append("text")
+          .classed("labely", true)
+          .attr("x", 0)
+          .attr("y", -margin.bottom/1.5 )
+          .attr("transform", "rotate(-90)")
+          .style("text-anchor", "end")
+          .text(yaxis_lbl);
+
+      /*
+        Set the font size of the x and y labels
+      */ 
+
+      svg.selectAll(".labelx")   
+          .style("font-size", fontsize_label_x + "px");
+
+      svg.selectAll(".labely")   
+          .style("font-size", fontsize_label_y + "px");
+
+
+
+      /*
+        ticks
+      */
+      
+
+
+
+      var objects = svg.append("svg")
+                .classed("objects", true)
+                .attr("width", width)
+                .attr("height", height);
+
+      objects.append("svg:line")
+              .classed("axisLine hAxisLine", true)
+              .attr("x1", 0)
+              .attr("y1", 0)
+              .attr("x2", width)
+              .attr("y2", 0)
+              .attr("transform", "translate(0," + height + ")");
+
+      objects.append("svg:line")
+              .classed("axisLine vAxisLine", true)
+              .attr("x1", 0)
+              .attr("y1", 0)
+              .attr("x2", 0)
+              .attr("y2", height);
+
+      var line = d3.line()
+                    .x(function(d,i) { 
+                      return x(d.x); 
+                    })
+                    .y(function(d) { 
+                      return y(d.y); 
+                    })
+
+      
+      var lines= objects.append("g")
+                  .attr("class","line" )
+                  .selectAll("path")
+                  .data(data)
+                  .enter()
+                  .append("path")
+                  .attr("d", function(d) { 
+                        THIS= this
+                        d.map(function(xx){xx.line=THIS;
+                                                  return xx;}); 
+                        return line(d);
+                  });
+      
+      function zoom() {
+        var transform   = d3.event.transform
+
+        xt     = transform.rescaleX(x);
+        yt     = transform.rescaleY(y);
+        var line2 = d3.line()
+          .x(function(d,i) { 
+            return xt(d.x); 
+          })
+          .y(function(d) { 
+            return yt(d.y); 
+          })
+
+        gX.call(xAxis.scale(xt));
+        gY.call(yAxis.scale(yt));
+        lines.attr("d", function(d){return line2(d)} );
+      }
+      var voronoiGroup = objects.append("g")
+        .attr("class", "voronoi");
+      
+      voronoiGroup.selectAll("path")
+          .data(voronoi.polygons(d3.merge(data)))
+            .enter().append("path")
+            .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
+            .on("mouseover", mouseover)
+            .on("mouseout", mouseout);
+
+        d3.select("#show-voronoi")
+            .property("disabled", false)
+            .on("change", function() { voronoiGroup.classed("voronoi--show", this.checked); });
+
+        function mouseover(d) {
+          d3.select(d.data.line).classed("line--hover", true);
+          d.data.line.parentNode.appendChild(d.data.line);
+        }
+
+        function mouseout(d) {
+          d3.select(d.data.line).classed("line--hover", false);
+        }
+
+
+    </script>
+  </body>
+</html>
+
+
+  
