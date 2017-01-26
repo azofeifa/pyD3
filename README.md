@@ -10,7 +10,7 @@ This library hopes to be a python wrapper for D3. In this way, pyD3 takes in as 
 First create some data to display as a bar chart. 
 ```
 import numpy as np
-y = np.random.uniform(0,1,7)
+y = np.random.uniform(0,10,10)
 ```
 
 So now we have some really simple data that we'd like to visualize. The big thing when using any of these modules (bar,scatter, hmap) is that you have to create an axes object from the HTML module
@@ -72,6 +72,28 @@ series = [ "Series "+ LBL[i%10] for i in range(D.shape[1]) ]
 ax.bar(D,series_labels=series)
 
 ```
+
+
+## Heat Maps
+I dont know about anyone else, but I find myself plotting large matrices as heatmaps all the time. And especially if the matrix is above a 20 x 20, looking at the column and row labels can be a pain. So this lets you input a matrix, a color for linear interplated colormap (divergenet colormap in progress) that goes white to your input color and will output a matrix where you can mouse over each cell and get basic descriptions about that datapoint. See below for usage:
+
+```
+ax = HTML.axes()
+D  = np.random.uniform(0,10,size=(10,10) )
+columns = [ "Series "+ LBL[i%10] for i in range(D.shape[0]) ]
+rows = [ str(i) for i in range(D.shape[1]) ]
+
+ax.hmap(D,cmap="green",row_labels=rows, col_labels=columns,aspect="stretch")
+'''
+aspect may either be set to stretch or square; square forces the layout to have cell/rectangles have 
+equal dimension, stretch will fill the browser page
+'''
+```
+Here is an example output from the hmap module.
+
+![Alt text](https://github.com/azofeifa/pyD3/blob/master/images/HmapShot.png)
+
+
 
 
 
