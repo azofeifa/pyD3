@@ -79,7 +79,7 @@ class axes:
 	'''
 		right now hmap() specific
 	'''
-	def set_xticklabels(self,lbls,fontsize=2,rot=0):
+	def set_xticklabels(self,lbls,fontsize=10,rot=0):
 		'''
 			check to make sure row labels are the same dimension 
 			as the input matrix
@@ -252,7 +252,9 @@ class axes:
 				series_labels 	= Series_labels
 
 		else:
-			A 	= D
+			A 	= np.matrix(D)
+			if A.shape[0]==1:
+				A 	= A.T
 
 		'''
 			check the x label dimensions
@@ -311,7 +313,7 @@ def main_hmap():
 	D 		= np.random.uniform(0,1,size=(20,10))
 
 
-	ax.hmap(D,pad=1,aspect="stretch",cmap="blue")
+	ax.hmap(D,pad=1,aspect="square",cmap="blue")
 
 	ax.set_xlabel("Something Cool",fontsize=30)
 	ax.set_ylabel("Something Cool 2",fontsize=30)
@@ -330,15 +332,24 @@ def main_scatter():
 def main_bar():
 	LBL 	= "ABCDEFGHIJKLMNOP"
 	ax 	= axes()
-	D 		= np.random.uniform(0,10,size=(10,13))
+
+
+	D 		= np.random.uniform(0,10,size=(50,4))
 	df 	= pd.DataFrame(D, columns=[ "Series "+ LBL[i%10] for i in range(D.shape[1]) ])
+
+
+
 	ax.bar(df)
+
+
 	ax.set_xlabel("Something X",fontsize=20)
 	ax.set_ylabel("Something Y",fontsize=20)
 	ax.set_xticklabels([ LBL[i%10] for i in range(D.shape[0]) ])
+
+
 	ax.set_show_labels(var=True)
-	ax.set_pad(10)
-	ax.set_title("Some title")
+	ax.set_pad(1)
+	ax.set_title("A Random Bar Chart")
 	ax.savefig("test.html")
 	ax.show()
 

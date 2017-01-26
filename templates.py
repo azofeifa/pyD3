@@ -547,11 +547,15 @@ class temp:
 
 
       var outerWidth        = window.innerWidth,
-            outerHeight     = window.innerHeight,
-            Bottom          = 300,
-            Top             = 200;
+            outerHeight     = window.innerHeight;
 
-      var margin                  = { top: Top, right: 300, bottom: Bottom, left: 100 };                  
+      var   Bottom          = outerHeight*0.2,
+            Top             = outerHeight*0.2,
+            Left 				 = outerWidth*0.1,
+            Right           = outerWidth*0.1;
+
+
+      var margin                  = { top: Top, right: Right, bottom: Bottom, left: Left };                  
                   width           = outerWidth - margin.left - margin.right,
                   height          = outerHeight - margin.top - margin.bottom;
 
@@ -627,7 +631,7 @@ class temp:
 
       var wh  = width / (data.length+1)
 
-
+      rescale()
       var tooltip = d3.select("#scatter").append("div").attr("class", "toolTip");
 
       var grp = svg.selectAll('g')
@@ -645,12 +649,12 @@ class temp:
 
 
                   tooltip
-                      .html("Value: " + data[i][type]+ "<br>" +
+                      .html("Value: " + parseFloat(Math.round(data[i][type] * 100) / 100).toFixed(2) + "<br>" +
                             "Label: " + xlabels[i]   )
-                      .style("left", x(i)-(pad/2) + 100 + "px")
-                      .style("top", y(d[type])+170 + "px")
+                      .style('position','absolute')
+                      .style("left", x(i) + Left  + "px")
+                      .style("top", y(d[type])+(Bottom*0.9 ) + "px")
                       .style("display", "inline-block")
-
                                     
 
                 d3.select(this).transition()
@@ -726,7 +730,7 @@ class temp:
           .text(yaxis_lbl)
 
       svg.append("text").attr("class", "y label") 
-          .attr("transform", "translate("+width/2 +","+ (height+(margin.left)) + ")rotate(0)")
+          .attr("transform", "translate("+width/2 +","+ (height+(Bottom/2)) + ")rotate(0)")
           .attr("text-anchor", "middle") 
           .style("font-size", fontsize_label_x)
           .text(xaxis_lbl)
@@ -738,8 +742,9 @@ class temp:
             }
             return xlabels[i];
           })
-          .attr("transform", "translate(0,10)rotate(" + xlabels_rot+ ")" )
+          .attr("transform", "translate(0,1)rotate(" + xlabels_rot+ ")" )
           .style("text-anchor", "start") 
+          .style("font-size",xlabels_fontsize)
       }
 		svg.append("text")
 					.attr("x", (width / 2))             
