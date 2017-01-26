@@ -147,11 +147,7 @@ Last but not least you can set x axis and y-axis labels as such
 ax.set_xlabel("N", fontsize=20)
 ax.set_ylabel("MD Score", fontsize=30)
 ```
-
-
 ## plot
-under development stay tuned
-## bar
 under development stay tuned
 
 
