@@ -15,12 +15,8 @@ class option:
 			return STR+str(self.data)
 		elif self.type=="string":
 			return STR+"\""+str(self.data)+"\""
-
 		print "Warning option: ", self.data, " was not given a type"
 		return ""
-
-
-
 
 class axes:
 	def __init__(self,facecolor="white",grid=False):
@@ -34,6 +30,7 @@ class axes:
 		self.PLOT  			= False
 		self.BAR 			= False
 		self.HMAP 			= False
+		self.NET 			= False
 		self.T 				= temp()
 
 		'''
@@ -47,6 +44,12 @@ class axes:
 
 
 		self.options 	= list()
+
+		'''
+			Network Specific stuff!
+		'''
+		self.nodes, self.links 	= dict(),list()
+
 
 	def __str__(self):
 		return "pyD3 axes object"
@@ -120,8 +123,28 @@ class axes:
 		else:
 			print "unrecognized option for aspection"
 			return -1
+	def set_edge_width(self, N):
+		self.options.append(option("edge_width", N, "numerical"))
+	def set_edge_distance(self, N):
+		self.options.append(option("edge_distance", N, "numerical"))
+	def set_tooltip_font(self, N):
+		self.options.append(option("tooltip_font", N, "numerical"))
+	def set_edge_opacity(self, N):
+		self.options.append(option("edge_opacity", N, "numerical"))
+	def set_edge_strength(self,N):
+		self.options.append(option("edge_strength", N, "numerical"))
+
 	def set_pad(self, value):
 		self.options.append(option("pad", value, "numerical"))
+	def _set_node(self,a,node_size, color):
+		self.nodes[a] 	= {"id":a, "size":node_size, "color":color }
+	def add_edge(self, a,b,edge_color="grey", weight=1,size_a=10,size_b=10,color_a="steelblue",color_b="steelblue"):
+		current 	= {"source":a,"target":b,"value":weight, "color":edge_color}
+		self.links.append(current)
+		self._set_node(a,size_a, color_a)
+		self._set_node(b,size_b, color_b)
+
+
 
 	def _get_list(self, arg):
 		if hasattr(arg, "__iter__"): #compare to self.N
@@ -138,6 +161,25 @@ class axes:
 		if isnan(x) or isinf(x):
 			return False
 		return True
+
+	def network(self,edge_width=3,edge_distance=300,tooltip_font=15,edge_opacity=0.1,edge_strength=-1000):
+		'''
+			check to make sure that the users has inputed some edges!
+		'''
+		assert len(self.links), "please add some edges via ax.add_edge(arg1,arg2,kargs**) before calling network" 
+		self.data 			= dict()
+		self.data["nodes"]= self.nodes.values()
+		self.data["links"]= self.links
+		self.data 			= str(self.data)
+
+
+		self.set_edge_distance(edge_distance)
+		self.set_edge_width(edge_width)
+		self.set_tooltip_font(tooltip_font)
+		self.set_edge_opacity(edge_opacity)
+		self.set_edge_strength(edge_strength)
+		self.NET 			= True
+
 
 	def hmap(self, D,cmap="green",SHOW_LABELS=0,row_labels=[],
 					col_labels=[],aspect="stretch",pad=1.0,xlabel="", ylabel=""):
@@ -298,12 +340,12 @@ class axes:
 		assert FHW is not None, "could not open for writing: " + path_to_file
 		if path_to_file.split(".")[-1]!="html":
 			path_to_file+=".html"
-		assert self.SCATTER or self.PLOT or self.BAR or self.HMAP, "need to call either scatter(), bar(), or plot() first"
-		FHW.write(self.T.first_part(scatter=self.SCATTER, hmap=self.HMAP,bar=self.BAR))
+		assert self.SCATTER or self.PLOT or self.BAR or self.HMAP or self.NET, "need to call either scatter(), bar(), hmap(), network(),plot() first"
+		FHW.write(self.T.first_part(scatter=self.SCATTER, hmap=self.HMAP,bar=self.BAR,network=self.NET))
 		FHW.write("var data="+self.data+";\n")
 
 		FHW.write(";\n".join([o.write() for o in self.options]))
-		FHW.write(self.T.second_part(scatter=self.SCATTER, hmap=self.HMAP,bar=self.BAR))
+		FHW.write(self.T.second_part(scatter=self.SCATTER, hmap=self.HMAP,bar=self.BAR,network=self.NET))
 	def show(self):
 		os.system("open " + self.html)
 
@@ -313,7 +355,7 @@ def main_hmap():
 	D 		= np.random.uniform(0,1,size=(20,10))
 
 
-	ax.hmap(D,pad=1,aspect="square",cmap="blue")
+	ax.hmap(D,pad=1,aspect="square",cmap="green")
 
 	ax.set_xlabel("Something Cool",fontsize=30)
 	ax.set_ylabel("Something Cool 2",fontsize=30)
@@ -337,11 +379,7 @@ def main_bar():
 	D 		= np.random.uniform(0,10,size=(50,4))
 	df 	= pd.DataFrame(D, columns=[ "Series "+ LBL[i%10] for i in range(D.shape[1]) ])
 
-
-
 	ax.bar(df)
-
-
 	ax.set_xlabel("Something X",fontsize=20)
 	ax.set_ylabel("Something Y",fontsize=20)
 	ax.set_xticklabels([ LBL[i%10] for i in range(D.shape[0]) ])
@@ -352,11 +390,24 @@ def main_bar():
 	ax.set_title("A Random Bar Chart")
 	ax.savefig("test.html")
 	ax.show()
+def main_network():
+	df 	= pd.read_csv("/Users/joazofeifa/Lab/Article_drafts/EMG_paper/files/STable_to_5_significant_TF_ct_associations.csv")
+	ax 	= axes()
+	for i,row in df.iterrows():
+		motif,ct 	= row.motif, row.ct
+		if row.pv < pow(10,-1):
+			ax.add_edge(ct.replace("_", " "), motif.split("_")[1], 
+				size_a=11,size_b=5,color_b="steelblue",color_a="green")
+
+	ax.network(edge_strength=-40)
+	ax.savefig("test.html")
+	ax.show()
 
 if __name__ == "__main__":
 	#main_hmap()
 	#main_scatter()
-	main_bar()
+	#main_bar()
+	main_network()
 
 
 

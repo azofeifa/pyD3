@@ -1,14 +1,18 @@
 class temp:
 	def __init__(self):
 		pass
-	def first_part(self,scatter=False,hmap=False,bar=False):
+	def first_part(self,scatter=False,hmap=False,bar=False,network=False):
+		if network:
+			return self.first_part_network()
 		if scatter:
 			return self.first_part_scatter()
 		if hmap:
 			return self.first_part_hmap()
 		if bar:
 			return self.first_part_bar()
-	def second_part(self,scatter=False,hmap=False,bar=False):
+	def second_part(self,scatter=False,hmap=False,bar=False,network=False):
+		if network:
+			return self.second_part_network()
 		if scatter:
 			return self.second_part_scatter()
 		if hmap:
@@ -138,7 +142,47 @@ class temp:
 				    <script>
 		'''
 		return STR
+	def first_part_network(self):
+		STR='''
+		<!DOCTYPE html>
+			<html>
+			  <head>
+			    <meta charset="utf-8">
+			    <title>pyD3</title>
+			  </head>
 
+			<meta charset="utf-8">
+			<style>
+			  .toolTip {
+			    position: absolute;
+			    display: none;
+			    height: auto;
+			    background: none repeat scroll 0 0 #ffffff;
+			    background: rgba(0, 0, 0, 0.8);
+			    color: #fff;
+			    line-height: 1;
+			    font-weight: bold;
+			    padding: 6px;
+
+			    border-radius: 10px;
+			    text-align: left;
+			    content: "\25BC";
+			  }
+
+			.links line {
+			  stroke-opacity: 0.6;
+			}
+
+			.nodes circle {
+			  stroke: #fff;
+			  stroke-width: 1.5px;
+			 }
+			</style>
+			<svg width="960" height="600"></svg>
+			<script src="https://d3js.org/d3.v4.min.js"></script>
+			<script>
+		'''
+		return STR
 
 	def second_part_scatter(self):
 		STR = '''
@@ -768,6 +812,126 @@ class temp:
 		    </script>
 		  </body>
 		</html>
+
+		'''
+		return STR
+	def second_part_network(self):
+		STR='''
+			var svg = d3.select("svg"),
+			    width = +svg.attr("width"),
+			    height = +svg.attr("height");
+
+			var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+			var simulation = d3.forceSimulation()
+			    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+			    .force("charge", d3.forceManyBody().strength(edge_strength))
+			    .force("center", d3.forceCenter(width / 2, height / 2))
+			    ;
+
+
+			var link = svg.append("g")
+			    .attr("class", "links")
+			  .selectAll("line")
+			  .data(data.links)
+			  .enter().append("line")
+			    .attr("stroke-width", edge_width)
+			    .attr("stroke", function(d,i){
+			      return d.color;
+			    })
+			    .style("stroke-opacity", edge_opacity);
+			var tooltip = d3.select("body").append("div")
+			                .attr("class", "toolTip");
+
+			var node = svg.append("g")
+			    .attr("class", "nodes")
+			  .selectAll("circle")
+			  .data(data.nodes)
+			  .enter().append("circle")
+			    .attr("r",  function(d) { return d.size; })
+			    .attr("fill", function(d) { return d.color; })
+			    .call(d3.drag()
+			        .on("start", dragstarted)
+			        .on("drag", dragged)
+			        .on("end", dragended))
+			    .on("mouseover",function(d,i){
+			      d3.select(this).transition().attr("r", d.size*1.5)
+			      d3.select(this).text("text")
+
+			      /*
+			      display neighboring edges
+			      */
+			      var degree =0
+			      d3.selectAll("line").transition().style("stroke-opacity", function(x,u){
+			        if (x.source.id == d.id || x.target.id == d.id){
+			          degree+=1;
+			          return 1.0;
+
+			        }
+			        return edge_opacity;
+			      }) 
+			      /*
+			        display neighboring edges
+			      */
+			      tooltip
+			          .html("Label: " + d.id+ "<br>" +
+			                "Degree: " + degree   )
+			          .style("left", d3.event.clientX + 20  + "px")
+			          .style("top", d3.event.clientY -40+ "px")
+			          .style("display", "inline-block")
+			          .style("font-size", tooltip_font+ "px")
+
+
+			    })
+			    .on("mouseout",function(d,i){
+			      d3.select(this).transition().attr("r", d.size)
+			      d3.selectAll("line").style("stroke-opacity", edge_opacity) 
+			      tooltip
+			        .style("display", "none")
+
+			    })
+
+			node.append("title")
+			    .text(function(d) { return d.id; });
+
+			simulation
+			    .nodes(data.nodes)
+			    .on("tick", ticked);
+
+			simulation.force("link")
+			    .links(data.links) ;
+
+			function ticked() {
+			  link
+			      .attr("x1", function(d) { return d.source.x; })
+			      .attr("y1", function(d) { return d.source.y; })
+			      .attr("x2", function(d) { return d.target.x; })
+			      .attr("y2", function(d) { return d.target.y; });
+
+			  node
+			      .attr("cx", function(d) { return d.x = Math.max(d.size, Math.min(width - d.size, d.x)); })
+			      .attr("cy", function(d) { return d.y = Math.max(d.size, Math.min(height - d.size, d.y)); });;
+			}
+
+			function dragstarted(d) {
+			  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+			  d.fx = d.x;
+			  d.fy = d.y;
+			}
+
+			function dragged(d) {
+			  d.fx = d3.event.x;
+			  d.fy = d3.event.y;
+			}
+
+			function dragended(d) {
+			  if (!d3.event.active) simulation.alphaTarget(0);
+			  d.fx = null;
+			  d.fy = null;
+			}
+
+			</script>
+			</html>
 
 		'''
 		return STR

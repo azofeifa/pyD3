@@ -1,294 +1,161 @@
-	
-			<!DOCTYPE html>
-				<html>
-				  <head>
-				    <meta charset="utf-8">
-				    <title>pyD3</title>
-				    <!-- <link rel="stylesheet" href="scatter.css" charset="utf-8"> -->
-				  </head>
-				  <body>
-				    <div id="scatter"></div>      
-				        <style>
-				            .toolTip {
-				              position: absolute;
-				              display: none;
-				              height: auto;
-				              background: none repeat scroll 0 0 #ffffff;
-				              background: rgba(0, 0, 0, 0.8);
-				              color: #fff;
-				              line-height: 1;
-				              font-weight: bold;
-				              padding: 6px;
-				              font-size: 10px;
 
-				              border-radius: 2px;
-				              text-align: left;
-				              content: "BC";
-				            }
-				        </style>
+		<!DOCTYPE html>
+			<html>
+			  <head>
+			    <meta charset="utf-8">
+			    <title>pyD3</title>
+			  </head>
 
-				    <script src="https://d3js.org/d3.v4.js"></script>
-				    <script>
-		var data=[[3.5670916588231769, 0.26847879644378181, 1.7818954083503413, 6.8707855793773422, 'steelblue'], [6.3153275777675137, 1.6333326131767012, 9.5689798505936956, 6.5813677790658094, 'steelblue'], [6.3908285469280628, 8.1644901423285567, 1.4480794201352132, 7.3566156544723871, 'steelblue'], [6.6599513079228476, 0.82263720715400335, 1.8210680717535455, 4.4911483328670485, 'steelblue'], [2.2249083414273585, 7.4720026028559055, 1.5458646210832716, 8.3582281252085586, 'steelblue'], [5.6559726640878241, 9.5024300437539129, 2.3441040581346293, 8.8304437128126914, 'steelblue'], [4.6061875482312011, 4.0781332367161145, 9.4153890021042645, 0.59183029942487586, 'steelblue'], [7.105648077789458, 0.16387831109742401, 4.2496587548526961, 1.3344618698942123, 'steelblue'], [7.8462788916923101, 8.4650251866161987, 5.6112320420999398, 8.6368378199061198, 'steelblue'], [8.5708784263019542, 5.1265000445013129, 6.4623148770814929, 8.1329005297495716, 'steelblue'], [6.1300913467424767, 4.5898156159547767, 3.4682546769955036, 1.256850882320486, 'steelblue'], [9.1150605882455409, 3.8638995915368888, 8.5370965755532779, 8.2071592855914037, 'steelblue'], [9.6968524579531525, 5.209702558071811, 5.5157800063144888, 6.8145736721247507, 'steelblue'], [6.8338230595429685, 3.776230669563394, 1.3125512432151498, 6.7162794681162277, 'steelblue'], [1.830869125788338, 7.7175218615608774, 1.9073448890024813, 6.2740786614069606, 'steelblue'], [0.82373558286832793, 1.556296616963988, 8.7275501320812374, 8.1677703160241482, 'steelblue'], [8.0639264748582722, 8.6552021152637142, 9.6790600717676174, 5.3490197602072236, 'steelblue'], [4.9003674140995912, 2.1021224932657523, 3.7227576062532917, 3.1476346447159043, 'steelblue'], [8.7315828104228821, 2.831885540379171, 0.44727913655895679, 1.1409987973611191, 'steelblue'], [0.88193029068943662, 5.6558820642994991, 9.5141228945630161, 4.1625708074172785, 'steelblue'], [5.5813638038226081, 9.9852297564311083, 4.2851625938149205, 6.4708815694524136, 'steelblue'], [3.8240069918626718, 8.9865720664068398, 8.8087145479683002, 5.6425091550733573, 'steelblue'], [1.4443121298470674, 0.89603501791524542, 9.1318345327805588, 9.1378810826820303, 'steelblue'], [6.6495805858988994, 6.0244433820375507, 6.7358903420561402, 3.883596815140371, 'steelblue'], [3.2738882709174844, 8.3996882484531028, 7.5719104856565291, 3.3409373279491508, 'steelblue'], [4.6731442372836804, 2.2803274828620235, 8.1376022136849695, 9.8567550459567954, 'steelblue'], [1.8235324846659207, 1.9534336305169497, 0.92011076170282924, 1.7622397578544235, 'steelblue'], [0.67174944064587017, 1.1184261567164011, 6.6399625486933846, 4.4556680306789929, 'steelblue'], [4.626049374564837, 2.1458347209945048, 1.5308263107781606, 7.8986057743029914, 'steelblue'], [4.974189634699961, 7.052985663867906, 7.0893431779868852, 3.3379062097342427, 'steelblue'], [8.3347131688869389, 2.6850392283217261, 3.7795381185971055, 2.5376522067502396, 'steelblue'], [2.7964424099830101, 7.7505120510016816, 9.2314061701002501, 4.971134942453884, 'steelblue'], [0.12378626343127586, 0.52399540217375362, 2.2706001259484445, 6.2062426322089026, 'steelblue'], [6.3736320622539626, 6.7712805079995322, 2.6765889202298432, 1.3277351022524397, 'steelblue'], [9.8276152621734951, 9.8278272704218494, 4.4471840428921672, 8.0406923424823127, 'steelblue'], [5.7395204127336443, 7.3026712010075698, 4.7623363338046278, 1.4223085721579998, 'steelblue'], [3.4900287049685366, 3.2496864822445426, 7.7064339078650823, 0.028049136766483684, 'steelblue'], [6.5448990764280239, 0.21118422661428604, 3.5025556243006237, 3.6686434429538806, 'steelblue'], [8.1200433962891001, 1.6904942367036624, 6.5575762050358088, 4.115715952601664, 'steelblue'], [0.15242223896882456, 4.5396409767839785, 9.2433635872718494, 7.5113560860969137, 'steelblue'], [0.82618858314125965, 6.5052591005374545, 8.6402356536033516, 8.69409441026019, 'steelblue'], [4.2072374510242758, 7.1128002601759102, 6.2937508023796216, 1.7000826144778358, 'steelblue'], [9.6332398975573987, 1.7980220541058567, 6.8014340290113395, 3.5416787053659582, 'steelblue'], [9.1720501622938464, 5.7456760085028504, 3.4455887772872318, 6.8561186876097331, 'steelblue'], [3.9281127022400875, 3.0397178559107187, 3.0463030554916273, 3.5347298989014106, 'steelblue'], [9.6344868423596193, 3.4671939908966398, 0.91442609236075945, 4.2476346911780656, 'steelblue'], [5.1920679087494648, 5.5654144603772471, 6.1609531287143025, 8.653391419371312, 'steelblue'], [8.6763338961163736, 5.5641879017600182, 4.7574856524101463, 0.42076641853012187, 'steelblue'], [8.2978810967603618, 9.5845059038155558, 6.8744744213089835, 1.4891147389250492, 'steelblue'], [7.3002410138927543, 7.8355386252095025, 6.2723096178993192, 0.78772283664048981, 'steelblue']];
-var xlabels=["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49"];
-var xlabels_fontsize=10;
-var xlabels_rot=0;
-var ylabels=["Series A","Series B","Series C","Series D"];
-var ylabels_fontsize=2;
-var SHOW_LABELS=1;
-var pad=10;
-var tick_xN=50;
-var fontsize_ticks_x=20;
-var tick_yN=10;
-var fontsize_ticks_y=20;
-var yaxis_lbl="";
-var fontsize_label_y=30;
-var xaxis_lbl="";
-var fontsize_label_x=30;
-var xaxis_lbl="Something X";
-var fontsize_label_x=20;
-var yaxis_lbl="Something Y";
-var fontsize_label_y=20;
-var xlabels=["A","B","C","D","E","F","G","H","I","J","A","B","C","D","E","F","G","H","I","J","A","B","C","D","E","F","G","H","I","J","A","B","C","D","E","F","G","H","I","J","A","B","C","D","E","F","G","H","I","J"];
-var xlabels_fontsize=10;
-var xlabels_rot=0;
-var SHOW_LABELS=1;
-var pad=1;
-var title="A Random Bar Chart";
-var fontsize_title=30
+			<meta charset="utf-8">
+			<style>
+			  .toolTip {
+			    position: absolute;
+			    display: none;
+			    height: auto;
+			    background: none repeat scroll 0 0 #ffffff;
+			    background: rgba(0, 0, 0, 0.8);
+			    color: #fff;
+			    line-height: 1;
+			    font-weight: bold;
+			    padding: 6px;
+
+			    border-radius: 10px;
+			    text-align: left;
+			    content: "BC";
+			  }
+
+			.links line {
+			  stroke-opacity: 0.6;
+			}
+
+			.nodes circle {
+			  stroke: #fff;
+			  stroke-width: 1.5px;
+			 }
+			</style>
+			<svg width="960" height="600"></svg>
+			<script src="https://d3js.org/d3.v4.min.js"></script>
+			<script>
+		var data={'nodes': [{'color': 'steelblue', 'id': 'ZFX', 'size': 5}, {'color': 'green', 'id': 'foreskin fibroblasts', 'size': 11}, {'color': 'steelblue', 'id': 'MAFK', 'size': 5}, {'color': 'steelblue', 'id': 'SCRT2', 'size': 5}, {'color': 'steelblue', 'id': 'FOXI1', 'size': 5}, {'color': 'green', 'id': 'ESC', 'size': 11}, {'color': 'green', 'id': 'malignant melaoma', 'size': 11}, {'color': 'steelblue', 'id': 'MAFG', 'size': 5}, {'color': 'steelblue', 'id': 'RARA', 'size': 5}, {'color': 'steelblue', 'id': 'HNF1B', 'size': 5}, {'color': 'steelblue', 'id': 'RARB', 'size': 5}, {'color': 'steelblue', 'id': 'P73', 'size': 5}, {'color': 'steelblue', 'id': 'RARG', 'size': 5}, {'color': 'steelblue', 'id': 'CLOCK', 'size': 5}, {'color': 'green', 'id': 'Umbilical', 'size': 11}, {'color': 'steelblue', 'id': 'BMAL1', 'size': 5}, {'color': 'steelblue', 'id': 'STA5A', 'size': 5}, {'color': 'steelblue', 'id': 'STA5B', 'size': 5}, {'color': 'steelblue', 'id': 'KLF4', 'size': 5}, {'color': 'steelblue', 'id': 'FOXF2', 'size': 5}, {'color': 'steelblue', 'id': 'RELB', 'size': 5}, {'color': 'steelblue', 'id': 'OLIG1', 'size': 5}, {'color': 'steelblue', 'id': 'DDIT3', 'size': 5}, {'color': 'green', 'id': 'Myeloid', 'size': 11}, {'color': 'steelblue', 'id': 'GSC2', 'size': 5}, {'color': 'steelblue', 'id': 'SP1', 'size': 5}, {'color': 'steelblue', 'id': 'SP2', 'size': 5}, {'color': 'steelblue', 'id': 'SP3', 'size': 5}, {'color': 'steelblue', 'id': 'FLI1', 'size': 5}, {'color': 'steelblue', 'id': 'NFAC1', 'size': 5}, {'color': 'steelblue', 'id': 'GATA6', 'size': 5}, {'color': 'steelblue', 'id': 'GATA2', 'size': 5}, {'color': 'steelblue', 'id': 'THB', 'size': 5}, {'color': 'steelblue', 'id': 'THA', 'size': 5}, {'color': 'steelblue', 'id': 'GATA1', 'size': 5}, {'color': 'steelblue', 'id': 'NFAT5', 'size': 5}, {'color': 'green', 'id': 'bone sarcoma', 'size': 11}, {'color': 'steelblue', 'id': 'BC11A', 'size': 5}, {'color': 'steelblue', 'id': 'RFX5', 'size': 5}, {'color': 'steelblue', 'id': 'MAZ', 'size': 5}, {'color': 'steelblue', 'id': 'RFX2', 'size': 5}, {'color': 'steelblue', 'id': 'RUNX2', 'size': 5}, {'color': 'steelblue', 'id': 'RUNX3', 'size': 5}, {'color': 'steelblue', 'id': 'PITX2', 'size': 5}, {'color': 'steelblue', 'id': 'NKX25', 'size': 5}, {'color': 'steelblue', 'id': 'CTCF', 'size': 5}, {'color': 'steelblue', 'id': 'NKX23', 'size': 5}, {'color': 'steelblue', 'id': 'FOXP3', 'size': 5}, {'color': 'steelblue', 'id': 'HXD10', 'size': 5}, {'color': 'steelblue', 'id': 'ZN143', 'size': 5}, {'color': 'steelblue', 'id': 'HTF4', 'size': 5}, {'color': 'steelblue', 'id': 'ZN148', 'size': 5}, {'color': 'steelblue', 'id': 'ZN639', 'size': 5}, {'color': 'steelblue', 'id': 'SOX18', 'size': 5}, {'color': 'steelblue', 'id': 'AP2D', 'size': 5}, {'color': 'steelblue', 'id': 'MITF', 'size': 5}, {'color': 'steelblue', 'id': 'COT2', 'size': 5}, {'color': 'steelblue', 'id': 'ZEP2', 'size': 5}, {'color': 'steelblue', 'id': 'ZEP1', 'size': 5}, {'color': 'steelblue', 'id': 'COT1', 'size': 5}, {'color': 'steelblue', 'id': 'EGR2', 'size': 5}, {'color': 'steelblue', 'id': 'BACH1', 'size': 5}, {'color': 'steelblue', 'id': 'SOX13', 'size': 5}, {'color': 'steelblue', 'id': 'JUN', 'size': 5}, {'color': 'steelblue', 'id': 'EGR4', 'size': 5}, {'color': 'steelblue', 'id': 'RUNX1', 'size': 5}, {'color': 'steelblue', 'id': 'NFE2', 'size': 5}, {'color': 'steelblue', 'id': 'TFE3', 'size': 5}, {'color': 'steelblue', 'id': 'NFIL3', 'size': 5}, {'color': 'steelblue', 'id': 'RREB1', 'size': 5}, {'color': 'green', 'id': 'cervical cancer', 'size': 11}, {'color': 'steelblue', 'id': 'TCF7', 'size': 5}, {'color': 'steelblue', 'id': 'FOS', 'size': 5}, {'color': 'steelblue', 'id': 'PEBB', 'size': 5}, {'color': 'steelblue', 'id': 'SMRC1', 'size': 5}, {'color': 'steelblue', 'id': 'PAX5', 'size': 5}, {'color': 'steelblue', 'id': 'PPARG', 'size': 5}, {'color': 'steelblue', 'id': 'CUX2', 'size': 5}, {'color': 'steelblue', 'id': 'SPI1', 'size': 5}, {'color': 'steelblue', 'id': 'TYY2', 'size': 5}, {'color': 'steelblue', 'id': 'TYY1', 'size': 5}, {'color': 'steelblue', 'id': 'NANOG', 'size': 5}, {'color': 'steelblue', 'id': 'HIC1', 'size': 5}, {'color': 'steelblue', 'id': 'IRF3', 'size': 5}, {'color': 'steelblue', 'id': 'IRF2', 'size': 5}, {'color': 'steelblue', 'id': 'IRF1', 'size': 5}, {'color': 'steelblue', 'id': 'IRF7', 'size': 5}, {'color': 'steelblue', 'id': 'ETV4', 'size': 5}, {'color': 'steelblue', 'id': 'ETV7', 'size': 5}, {'color': 'steelblue', 'id': 'ETV6', 'size': 5}, {'color': 'steelblue', 'id': 'IRF9', 'size': 5}, {'color': 'steelblue', 'id': 'IRF8', 'size': 5}, {'color': 'steelblue', 'id': 'PO5F1', 'size': 5}, {'color': 'steelblue', 'id': 'ZBT7A', 'size': 5}, {'color': 'steelblue', 'id': 'ZBT7B', 'size': 5}, {'color': 'steelblue', 'id': 'PRDM1', 'size': 5}, {'color': 'steelblue', 'id': 'TF65', 'size': 5}, {'color': 'steelblue', 'id': 'HES5', 'size': 5}, {'color': 'steelblue', 'id': 'TFDP1', 'size': 5}, {'color': 'steelblue', 'id': 'HES7', 'size': 5}, {'color': 'steelblue', 'id': 'BATF', 'size': 5}, {'color': 'steelblue', 'id': 'NR2C2', 'size': 5}, {'color': 'steelblue', 'id': 'PITX3', 'size': 5}, {'color': 'steelblue', 'id': 'FOSB', 'size': 5}, {'color': 'steelblue', 'id': 'PPARA', 'size': 5}, {'color': 'steelblue', 'id': 'SMAD2', 'size': 5}, {'color': 'steelblue', 'id': 'TBX2', 'size': 5}, {'color': 'steelblue', 'id': 'TBX1', 'size': 5}, {'color': 'green', 'id': 'lung', 'size': 11}, {'color': 'steelblue', 'id': 'REL', 'size': 5}, {'color': 'steelblue', 'id': 'TBX5', 'size': 5}, {'color': 'steelblue', 'id': 'MESP1', 'size': 5}, {'color': 'steelblue', 'id': 'IKZF1', 'size': 5}, {'color': 'steelblue', 'id': 'USF2', 'size': 5}, {'color': 'steelblue', 'id': 'STAT4', 'size': 5}, {'color': 'steelblue', 'id': 'STAT3', 'size': 5}, {'color': 'steelblue', 'id': 'STAT2', 'size': 5}, {'color': 'steelblue', 'id': 'STAT1', 'size': 5}, {'color': 'steelblue', 'id': 'EHF', 'size': 5}, {'color': 'steelblue', 'id': 'COE1', 'size': 5}, {'color': 'steelblue', 'id': 'KAISO', 'size': 5}, {'color': 'steelblue', 'id': 'USF1', 'size': 5}, {'color': 'steelblue', 'id': 'FOSL1', 'size': 5}, {'color': 'steelblue', 'id': 'PO2F1', 'size': 5}, {'color': 'steelblue', 'id': 'HNF1A', 'size': 5}, {'color': 'steelblue', 'id': 'FOSL2', 'size': 5}, {'color': 'steelblue', 'id': 'NFKB1', 'size': 5}, {'color': 'green', 'id': 'breast cancer', 'size': 11}, {'color': 'steelblue', 'id': 'TBX15', 'size': 5}, {'color': 'steelblue', 'id': 'ETV1', 'size': 5}, {'color': 'steelblue', 'id': 'TAL1', 'size': 5}, {'color': 'steelblue', 'id': 'ZN740', 'size': 5}, {'color': 'steelblue', 'id': 'THAP1', 'size': 5}, {'color': 'steelblue', 'id': 'ZN219', 'size': 5}, {'color': 'steelblue', 'id': 'ITF2', 'size': 5}, {'color': 'steelblue', 'id': 'RXRB', 'size': 5}, {'color': 'green', 'id': 'colon cancer', 'size': 11}, {'color': 'steelblue', 'id': 'FEV', 'size': 5}, {'color': 'steelblue', 'id': 'FOXL1', 'size': 5}, {'color': 'steelblue', 'id': 'HEY2', 'size': 5}, {'color': 'steelblue', 'id': 'PROX1', 'size': 5}, {'color': 'steelblue', 'id': 'HEY1', 'size': 5}, {'color': 'steelblue', 'id': 'ID4', 'size': 5}, {'color': 'steelblue', 'id': 'GABPA', 'size': 5}, {'color': 'steelblue', 'id': 'NF2L2', 'size': 5}, {'color': 'steelblue', 'id': 'NRF1', 'size': 5}, {'color': 'green', 'id': 'heart', 'size': 11}, {'color': 'green', 'id': 'prostate cancer', 'size': 11}, {'color': 'steelblue', 'id': 'JUNB', 'size': 5}, {'color': 'steelblue', 'id': 'JUND', 'size': 5}, {'color': 'steelblue', 'id': 'NFYC', 'size': 5}, {'color': 'steelblue', 'id': 'NFYB', 'size': 5}, {'color': 'steelblue', 'id': 'NFYA', 'size': 5}, {'color': 'steelblue', 'id': 'SMAD4', 'size': 5}, {'color': 'steelblue', 'id': 'YBOX1', 'size': 5}, {'color': 'steelblue', 'id': 'SRF', 'size': 5}, {'color': 'steelblue', 'id': 'ELF3', 'size': 5}, {'color': 'steelblue', 'id': 'ELF2', 'size': 5}, {'color': 'green', 'id': 'kidney', 'size': 11}, {'color': 'steelblue', 'id': 'PITX1', 'size': 5}, {'color': 'steelblue', 'id': 'KLF16', 'size': 5}, {'color': 'steelblue', 'id': 'KLF15', 'size': 5}, {'color': 'steelblue', 'id': 'CTCFL', 'size': 5}, {'color': 'steelblue', 'id': 'TGIF1', 'size': 5}, {'color': 'steelblue', 'id': 'PURA', 'size': 5}, {'color': 'steelblue', 'id': 'ETS2', 'size': 5}, {'color': 'steelblue', 'id': 'KLF6', 'size': 5}, {'color': 'steelblue', 'id': 'SOX2', 'size': 5}, {'color': 'steelblue', 'id': 'ETS1', 'size': 5}, {'color': 'steelblue', 'id': 'KLF1', 'size': 5}, {'color': 'steelblue', 'id': 'CEBPZ', 'size': 5}, {'color': 'steelblue', 'id': 'P53', 'size': 5}, {'color': 'steelblue', 'id': 'SP4', 'size': 5}, {'color': 'green', 'id': 'leukemia', 'size': 11}, {'color': 'steelblue', 'id': 'ELF1', 'size': 5}, {'color': 'steelblue', 'id': 'VDR', 'size': 5}, {'color': 'steelblue', 'id': 'HES1', 'size': 5}, {'color': 'steelblue', 'id': 'HMGA1', 'size': 5}, {'color': 'steelblue', 'id': 'PBX3', 'size': 5}, {'color': 'steelblue', 'id': 'SPIB', 'size': 5}, {'color': 'steelblue', 'id': 'P63', 'size': 5}, {'color': 'steelblue', 'id': 'NRL', 'size': 5}, {'color': 'steelblue', 'id': 'KLF14', 'size': 5}, {'color': 'steelblue', 'id': 'TLX1', 'size': 5}, {'color': 'steelblue', 'id': 'FOXD1', 'size': 5}, {'color': 'steelblue', 'id': 'FOXC1', 'size': 5}, {'color': 'steelblue', 'id': 'ATF1', 'size': 5}, {'color': 'steelblue', 'id': 'ATF3', 'size': 5}, {'color': 'steelblue', 'id': 'ATF2', 'size': 5}], 'links': [{'color': 'grey', 'source': 'heart', 'target': 'BACH1', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'JUN', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'ZFX', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'FOSL1', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'FOSL2', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'NRF1', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'CTCF', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'NFYB', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'NRL', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'PO2F1', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'FLI1', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'ETV7', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'NFE2', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'TFDP1', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'FOSB', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'NFAC1', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'FOS', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'FOXP3', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'SCRT2', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'SMRC1', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'NF2L2', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'SP2', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'BATF', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'BATF', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'KLF4', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'EGR2', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'ZN639', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'JUNB', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'JUND', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'RFX2', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'MAFK', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'NFYC', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'CTCFL', 'value': 1}, {'color': 'grey', 'source': 'heart', 'target': 'TYY2', 'value': 1}, {'color': 'grey', 'source': 'foreskin fibroblasts', 'target': 'PO2F1', 'value': 1}, {'color': 'grey', 'source': 'foreskin fibroblasts', 'target': 'SCRT2', 'value': 1}, {'color': 'grey', 'source': 'foreskin fibroblasts', 'target': 'PPARG', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'NFKB1', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'RUNX2', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'PRDM1', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'GABPA', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'SPI1', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'IRF1', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'BC11A', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'REL', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'PO2F1', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'SPIB', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'FLI1', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'ETS1', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'TF65', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'ZEP2', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'RELB', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'P63', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'ELF1', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'ETV1', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'COE1', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'EHF', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'STAT2', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'ZEP1', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'NFIL3', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'IRF3', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'IRF9', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'ETS2', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'IRF7', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'IRF8', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'YBOX1', 'value': 1}, {'color': 'grey', 'source': 'Myeloid', 'target': 'IRF2', 'value': 1}, {'color': 'grey', 'source': 'malignant melaoma', 'target': 'JUN', 'value': 1}, {'color': 'grey', 'source': 'malignant melaoma', 'target': 'TBX1', 'value': 1}, {'color': 'grey', 'source': 'malignant melaoma', 'target': 'FOSL1', 'value': 1}, {'color': 'grey', 'source': 'malignant melaoma', 'target': 'FOSL2', 'value': 1}, {'color': 'grey', 'source': 'malignant melaoma', 'target': 'FOSB', 'value': 1}, {'color': 'grey', 'source': 'malignant melaoma', 'target': 'BATF', 'value': 1}, {'color': 'grey', 'source': 'malignant melaoma', 'target': 'JUND', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'JUN', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'FOSL1', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'FOSL2', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'P53', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'ETV7', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'ELF3', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'NFE2', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'P63', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'BATF', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'JUND', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'ETV4', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'FEV', 'value': 1}, {'color': 'grey', 'source': 'Umbilical', 'target': 'MAFK', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'BACH1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'STA5A', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'HXD10', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'SP1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'JUN', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'GABPA', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'FOSL1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'GSC2', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'SOX13', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'STAT4', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'FOSL2', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'TYY1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'STAT1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'STAT1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'TAL1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'NFYB', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'SPIB', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'FLI1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'ETS1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'MAFG', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'SOX18', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'NFE2', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'STA5B', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'FOSB', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'STAT3', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'FOS', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'TCF7', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'SP4', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'ATF3', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'SMRC1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'NF2L2', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'USF1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'ETV1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'FOXI1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'KAISO', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'PBX3', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'KLF4', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'USF2', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'EHF', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'GATA2', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'CEBPZ', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'ATF2', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'ZN639', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'GATA1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'GATA1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'JUNB', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'JUND', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'MITF', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'CUX2', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'GATA6', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'ETV6', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'ETS2', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'MAFK', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'MAFK', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'NFYC', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'ELF2', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'PPARG', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'BMAL1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'NFYA', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'YBOX1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'ATF1', 'value': 1}, {'color': 'grey', 'source': 'leukemia', 'target': 'KLF6', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'BACH1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'SP1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'JUN', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'THA', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'RARG', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'GABPA', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'FOSL1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'FOSL2', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'TYY1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'TAL1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'ZBT7B', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'CTCF', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'NFYB', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'FLI1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'ETS1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'THA', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'ZN143', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'SRF', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'PITX2', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'ETV7', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'NFE2', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'AP2D', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'TFDP1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'FOSB', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'FOS', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'ELF1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'THB', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'SMRC1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'NF2L2', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'IKZF1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'ETV1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'FOXI1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'TFE3', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'PBX3', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'RXRB', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'BATF', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'BATF', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'KLF4', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'CEBPZ', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'MAZ', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'GATA1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'JUNB', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'JUND', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'RFX2', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'MAFK', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'NFYC', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'KLF14', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'CTCFL', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'HEY2', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'NFYA', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'YBOX1', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'RARA', 'value': 1}, {'color': 'grey', 'source': 'colon cancer', 'target': 'KLF6', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'THA', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'RARG', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'HES7', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'RUNX3', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'PAX5', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'THAP1', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'ITF2', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'TLX1', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'ID4', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'RFX5', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'P53', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'ZN219', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'VDR', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'THA', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'SRF', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'PITX2', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'DDIT3', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'NFAC1', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'HMGA1', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'NFAT5', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'THB', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'MESP1', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'IKZF1', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'PEBB', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'RUNX1', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'HES1', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'HTF4', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'P73', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'FOXL1', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'RXRB', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'TBX2', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'RARB', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'TBX5', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'HEY1', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'PAX5', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'HES5', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'PPARG', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'HEY2', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'NKX25', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'KLF1', 'value': 1}, {'color': 'grey', 'source': 'cervical cancer', 'target': 'RARA', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'SP1', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'COT2', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'COT2', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'COT1', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'FOXF2', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'ZBT7A', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'NR2C2', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'NFYB', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'ZN143', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'SMAD2', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'FOXC1', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'FOXD1', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'EGR4', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'SMAD4', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'OLIG1', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'KLF14', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'PPARA', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'NKX23', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'NFYA', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'TGIF1', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'HIC1', 'value': 1}, {'color': 'grey', 'source': 'breast cancer', 'target': 'KLF6', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'BACH1', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'SP1', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'JUN', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'FOSL1', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'HNF1A', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'HNF1B', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'FOSL2', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'NFE2', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'FOSB', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'FOS', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'SMRC1', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'NF2L2', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'BATF', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'KLF4', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'JUNB', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'JUND', 'value': 1}, {'color': 'grey', 'source': 'lung', 'target': 'MAFK', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'SP1', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'PITX3', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'COT1', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'SOX2', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'SOX13', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'ZBT7A', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'ZBT7B', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'PO5F1', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'SMAD2', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'FOXC1', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'FOXD1', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'PITX1', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'EGR4', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'SMAD4', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'NANOG', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'RFX2', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'HEY1', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'KLF14', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'HEY2', 'value': 1}, {'color': 'grey', 'source': 'ESC', 'target': 'HIC1', 'value': 1}, {'color': 'grey', 'source': 'prostate cancer', 'target': 'SOX13', 'value': 1}, {'color': 'grey', 'source': 'prostate cancer', 'target': 'TBX15', 'value': 1}, {'color': 'grey', 'source': 'prostate cancer', 'target': 'SOX18', 'value': 1}, {'color': 'grey', 'source': 'prostate cancer', 'target': 'CLOCK', 'value': 1}, {'color': 'grey', 'source': 'prostate cancer', 'target': 'SP4', 'value': 1}, {'color': 'grey', 'source': 'prostate cancer', 'target': 'SP2', 'value': 1}, {'color': 'grey', 'source': 'prostate cancer', 'target': 'ZN148', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'BACH1', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'NFKB1', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'JUN', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'GABPA', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'FOSL1', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'FOSL2', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'P53', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'REL', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'CTCF', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'NFYB', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'NRL', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'PO2F1', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'FLI1', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'TF65', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'NFE2', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'RELB', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'P63', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'FOSB', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'FOS', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'SCRT2', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'SMRC1', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'NF2L2', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'BATF', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'BATF', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'KLF4', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'JUNB', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'JUND', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'MAFK', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'CTCFL', 'value': 1}, {'color': 'grey', 'source': 'bone sarcoma', 'target': 'NFYA', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'TBX1', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'SP3', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'KLF15', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'TBX15', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'CLOCK', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'RREB1', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'SP2', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'PROX1', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'ZN740', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'PURA', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'EGR2', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'MAZ', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'KLF16', 'value': 1}, {'color': 'grey', 'source': 'kidney', 'target': 'ZN148', 'value': 1}]};
+var edge_distance=300;
+var edge_width=3;
+var tooltip_font=15;
+var edge_opacity=0.1;
+var edge_strength=-40
+			var svg = d3.select("svg"),
+			    width = +svg.attr("width"),
+			    height = +svg.attr("height");
+
+			var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+			var simulation = d3.forceSimulation()
+			    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+			    .force("charge", d3.forceManyBody().strength(edge_strength))
+			    .force("center", d3.forceCenter(width / 2, height / 2))
+			    ;
 
 
+			var link = svg.append("g")
+			    .attr("class", "links")
+			  .selectAll("line")
+			  .data(data.links)
+			  .enter().append("line")
+			    .attr("stroke-width", edge_width)
+			    .attr("stroke", function(d,i){
+			      return d.color;
+			    })
+			    .style("stroke-opacity", edge_opacity);
+			var tooltip = d3.select("body").append("div")
+			                .attr("class", "toolTip");
 
-      var type    = 0
-      var min   = d3.min(data, function(d){ return  d[type]} );
-      var max   = d3.max(data, function(d){ return d[type] } );
+			var node = svg.append("g")
+			    .attr("class", "nodes")
+			  .selectAll("circle")
+			  .data(data.nodes)
+			  .enter().append("circle")
+			    .attr("r",  function(d) { return d.size; })
+			    .attr("fill", function(d) { return d.color; })
+			    .call(d3.drag()
+			        .on("start", dragstarted)
+			        .on("drag", dragged)
+			        .on("end", dragended))
+			    .on("mouseover",function(d,i){
+			      d3.select(this).transition().attr("r", d.size*1.5)
+			      d3.select(this).text("text")
 
-      var type_code = d3.map()      
+			      /*
+			      display neighboring edges
+			      */
+			      var degree =0
+			      d3.selectAll("line").transition().style("stroke-opacity", function(x,u){
+			        if (x.source.id == d.id || x.target.id == d.id){
+			          degree+=1;
+			          return 1.0;
 
-      ylabels.forEach(function(d,i){type_code.set(d,i) })
-
-
-      var outerWidth        = window.innerWidth,
-            outerHeight     = window.innerHeight;
-
-      var   Bottom          = outerHeight*0.2,
-            Top             = outerHeight*0.2,
-            Left 				 = outerWidth*0.1,
-            Right           = outerWidth*0.1;
-
-
-      var margin                  = { top: Top, right: Right, bottom: Bottom, left: Left };                  
-                  width           = outerWidth - margin.left - margin.right,
-                  height          = outerHeight - margin.top - margin.bottom;
-
-      var dispatch = d3.dispatch("load", "statechange");
-      // A drop-down menu for selecting a state; uses the "menu" namespace.
-      dispatch.on("load.menu", function(ylabels) {
-
-        var select = d3.select("#scatter")
-                        .append("select")
-                        .style("border-width",0)
-                        .style("font-family","Times New Roman")
-                        .style("font-size",10)
-                        .on("change", function(DD) { 
-                          dispatch.call("statechange",this,this.value
-                          ); });
-
-        select.selectAll("option")
-            .data(ylabels)
-          .enter().append("option")
-            .attr("value", function(d) { return d; })
-            .text(function(d) { return d; })
-        
-        dispatch.on("statechange.menu", function(state) {
-            type=type_code.get(state);
-
-            rescale();
-
-
-            svg.selectAll("rect")
-              .transition()
-
-              .attr("y", function(d,i){
-                if ((d[type]) > 0){
-                  return  y(d[type])
-                }
-                return y(0)
-              })  
-
-              .attr("height", function(d,i){
-                if ((d[type]) > 0){
-                  return y(0)-y(d[type])
-                }
-                return y( d[type])-y(0)
-              })
-
-             return state
-        });
-        
-      });
-      dispatch.call("load", this,ylabels)
-      var svg = d3.select("#scatter")
-                  .append("svg")
-                  .attr("width", outerWidth)
-                  .attr("height", outerHeight)
-                  .append("g")
-                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+			        }
+			        return edge_opacity;
+			      }) 
+			      /*
+			        display neighboring edges
+			      */
+			      tooltip
+			          .html("Label: " + d.id+ "<br>" +
+			                "Degree: " + degree   )
+			          .style("left", d3.event.clientX + 20  + "px")
+			          .style("top", d3.event.clientY -40+ "px")
+			          .style("display", "inline-block")
+			          .style("font-size", tooltip_font+ "px")
 
 
-      var x           = d3.scaleLinear()
-                          .domain([-1, data.length])
-                          .range([ 0, width]) ;
+			    })
+			    .on("mouseout",function(d,i){
+			      d3.select(this).transition().attr("r", d.size)
+			      d3.selectAll("line").style("stroke-opacity", edge_opacity) 
+			      tooltip
+			        .style("display", "none")
 
-      var y           = d3.scaleLinear()
-                          .domain([Math.min(0,min),max])
-                          .range([height,0]) ;
+			    })
 
-      svg.selectAll(".labelx")   
-          .style("font-size", fontsize_label_x + "px");
+			node.append("title")
+			    .text(function(d) { return d.id; });
 
-      svg.selectAll(".labely")   
-          .style("font-size", fontsize_label_y + "px");
+			simulation
+			    .nodes(data.nodes)
+			    .on("tick", ticked);
 
+			simulation.force("link")
+			    .links(data.links) ;
 
-      var wh  = width / (data.length+1)
+			function ticked() {
+			  link
+			      .attr("x1", function(d) { return d.source.x; })
+			      .attr("y1", function(d) { return d.source.y; })
+			      .attr("x2", function(d) { return d.target.x; })
+			      .attr("y2", function(d) { return d.target.y; });
 
-      rescale()
-      var tooltip = d3.select("#scatter").append("div").attr("class", "toolTip");
+			  node
+			      .attr("cx", function(d) { return d.x = Math.max(d.size, Math.min(width - d.size, d.x)); })
+			      .attr("cy", function(d) { return d.y = Math.max(d.size, Math.min(height - d.size, d.y)); });;
+			}
 
-      var grp = svg.selectAll('g')
-              .data(data)
-              .enter()
-              .append('rect')
-              .attr("x", function(d,i){
-                return  x(i)-((wh-pad)/2)
-              })  
-              .attr("width", (wh)-pad)
-              .attr("fill", function(d,i){
-                return d[ylabels.length];
-              })
-              .on('mouseover',function(d,i){
+			function dragstarted(d) {
+			  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+			  d.fx = d.x;
+			  d.fy = d.y;
+			}
 
+			function dragged(d) {
+			  d.fx = d3.event.x;
+			  d.fy = d3.event.y;
+			}
 
-                  tooltip
-                      .html("Value: " + parseFloat(Math.round(data[i][type] * 100) / 100).toFixed(2) + "<br>" +
-                            "Label: " + xlabels[i]   )
-                      .style('position','absolute')
-                      .style("left", x(i) + Left  + "px")
-                      .style("top", y(d[type])+(Bottom*0.9 ) + "px")
-                      .style("display", "inline-block")
-                                    
+			function dragended(d) {
+			  if (!d3.event.active) simulation.alphaTarget(0);
+			  d.fx = null;
+			  d.fy = null;
+			}
 
-                d3.select(this).transition()
-                    .duration(100)   
-                    .attr('fill', "grey")
-              })
-
-              .on('mouseout',function(d,i){
-                  tooltip
-                      .style("display", "none")
-
-                d3.select(this).transition()
-                    .duration(100)   
-                    .attr('fill', function(d,i){
-                      return d[ylabels.length];
-                    })
-
-              })
-
-              .attr("height",0)
-              .attr("y",y(0))
-                
-              .transition()
-              .duration(1000)
-              .ease(d3.easeBounce)
-              .attr("y", function(d,i){
-                if ((d[type]) > 0){
-                  return  y(d[type])
-                }
-                return y(0)
-              }).attr("height", function(d,i){
-                if ((d[type]) > 0){
-
-                  return y(0)-y(d[type])
-                }
-                return y( d[type])-y(0)
-              })
-                
-      // draw the x axis
-      var xAxis = d3.axisBottom(x).tickSize(1).ticks(tick_xN)
-
-      // draw the y axis
-      var yAxis = d3.axisLeft(y).tickSize(1).ticks(tick_yN);
-
-      gX  = svg.append("g")
-                .classed("x axis", true)
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis)
-      gX.style("font-size", fontsize_ticks_x)
-          .append("text")
-          .classed("labelx", true)
-          .attr("x", width)
-          .attr("y", height)
-
-      /*
-        yaxis and y font tick size
-      */ 
-
-      gY  = svg.append("g")
-          .classed("yaxis", true)
-          .call(yAxis)
-
-      gY.style("font-size", fontsize_ticks_y)
-          .append("text")
-          .classed("labely", true)
-          .attr("x", 0)
-          .attr("y", -margin.bottom/1.5 )
-          .attr("transform", "rotate(-90)")
-      svg.append("text").attr("class", "y label") 
-          .attr("transform", "translate("+-margin.left/2 +","+ height/2 + ")rotate(-90)")
-          .attr("text-anchor", "middle") 
-          .style("font-size", fontsize_label_y)
-          .text(yaxis_lbl)
-
-      svg.append("text").attr("class", "y label") 
-          .attr("transform", "translate("+width/2 +","+ (height+(Bottom/2)) + ")rotate(0)")
-          .attr("text-anchor", "middle") 
-          .style("font-size", fontsize_label_x)
-          .text(xaxis_lbl)
-      gX.selectAll("text").text("")
-      if (SHOW_LABELS){
-          gX.selectAll("text").text(function(i){
-            if (i < 0 || i > xlabels.length){
-              return ""
-            }
-            return xlabels[i];
-          })
-          .attr("transform", "translate(0,1)rotate(" + xlabels_rot+ ")" )
-          .style("text-anchor", "start") 
-          .style("font-size",xlabels_fontsize)
-      }
-		svg.append("text")
-					.attr("x", (width / 2))             
-					.attr("y", 0 - (margin.top / 2))
-					.attr("text-anchor", "middle")  
-					.style("font-size", fontsize_title) 
-					.text(title);
-
-      function rescale() {
-
-            var min   = d3.min(data, function(d){ return  d[type]} );
-            var max   = d3.max(data, function(d){ return d[type] } );
-
-            y.domain([Math.min(0,min),max]).range([height,0])  // change scale to 0, to between 10 and 100
-            var yAxis = d3.axisLeft(y).tickSize(1).ticks(tick_yN);
-            svg.select("g.yaxis").call(yAxis)
-
-        }
-
-
-		    </script>
-		  </body>
-		</html>
+			</script>
+			</html>
 
 		
