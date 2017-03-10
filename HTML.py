@@ -355,7 +355,7 @@ def main_hmap():
 	D 		= np.random.uniform(0,1,size=(20,10))
 
 
-	ax.hmap(D,pad=1,aspect="square",cmap="green")
+	ax.hmap(D,pad=1,aspect="stretch",cmap="green")
 
 	ax.set_xlabel("Something Cool",fontsize=30)
 	ax.set_ylabel("Something Cool 2",fontsize=30)
@@ -366,10 +366,17 @@ def main_scatter():
 	ax 	= axes()
 	xs 	= np.random.uniform(0,1,100)
 	ys 	= xs + np.random.normal(0,0.1,len(xs))
-	ax.scatter(xs,ys)
+
+	labels=[str(i) for i in range(100)]
+	df 			= pd.read_csv("/Volumes/Joeys_External/Motif_Displacements_RUNX1/SRR1745516_SRR1105736_225_175.csv")
+
+	ax.scatter(np.log(df["counts"]+1),df["mds"],lbls=df["motif"])
 	ax.set_xtick_res(10,fontsize=20)
 	ax.set_ytick_res(10,fontsize=20)
-	ax.savefig("test.html")
+	ax.set_xlabel("Counts")
+	ax.set_ylabel("Change in MD score")
+	ax.set_title("SRR1745516_SRR1105736_225_175")
+	ax.savefig("SRR1745516_SRR1105736_225_175.html")
 	ax.show()
 def main_bar():
 	LBL 	= "ABCDEFGHIJKLMNOP"
@@ -399,15 +406,15 @@ def main_network():
 			ax.add_edge(ct.replace("_", " "), motif.split("_")[1], 
 				size_a=11,size_b=5,color_b="steelblue",color_a="green")
 
-	ax.network(edge_strength=-40)
-	ax.savefig("test.html")
+	ax.network(edge_strength=-40) 
+	ax.savefig("SRR1552482_SRR1552480_425_350.html")
 	ax.show()
 
 if __name__ == "__main__":
 	#main_hmap()
-	#main_scatter()
-	#main_bar()
-	main_network()
+	main_scatter()
+	#main_bar() d 
+	#main_network()
 
 
 
