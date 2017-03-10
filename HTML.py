@@ -413,7 +413,7 @@ def main_network():
 if __name__ == "__main__":
 	#main_hmap()
 	main_scatter()
-	#main_bar() d 
+	#main_bar() 
 	#main_network()
 
 

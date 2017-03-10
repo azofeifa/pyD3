@@ -75,7 +75,7 @@ class temp:
 		      display:inline-block;    
 		      text-align: center;     
 		      padding: 5px;       
-		      font: 16px sans-serif #FFFFFF;    
+		      font: 28px sans-serif #FFFFFF;    
 		      background: #282828 ; 
 		      color: #FFFFFF;
 		    }
@@ -130,7 +130,7 @@ class temp:
 				              line-height: 1;
 				              font-weight: bold;
 				              padding: 6px;
-				              font-size: 10px;
+				              font-size: 18px;
 
 				              border-radius: 2px;
 				              text-align: left;
@@ -593,9 +593,9 @@ class temp:
       var outerWidth        = window.innerWidth,
             outerHeight     = window.innerHeight;
 
-      var   Bottom          = outerHeight*0.2,
+      var   Bottom          = outerHeight*0.3,
             Top             = outerHeight*0.2,
-            Left 				 = outerWidth*0.1,
+            Left 				 = outerWidth*0.3,
             Right           = outerWidth*0.1;
 
 
@@ -693,7 +693,7 @@ class temp:
 
 
                   tooltip
-                      .html("Value: " + parseFloat(Math.round(data[i][type] * 100) / 100).toFixed(2) + "<br>" +
+                      .html("Value: " + parseFloat(data[i][type].toFixed(10)) + "<br>" +
                             "Label: " + xlabels[i]   )
                       .style('position','absolute')
                       .style("left", x(i) + Left  + "px")
