@@ -114,7 +114,6 @@ class temp:
 				<html>
 				  <head>
 				    <meta charset="utf-8">
-				    <title>pyD3</title>
 				    <!-- <link rel="stylesheet" href="scatter.css" charset="utf-8"> -->
 				  </head>
 				  <body>
@@ -611,7 +610,7 @@ class temp:
                         .append("select")
                         .style("border-width",0)
                         .style("font-family","Times New Roman")
-                        .style("font-size",10)
+                        .style("font-size",20 +"px")
                         .on("change", function(DD) { 
                           dispatch.call("statechange",this,this.value
                           ); });
@@ -620,6 +619,7 @@ class temp:
             .data(ylabels)
           .enter().append("option")
             .attr("value", function(d) { return d; })
+            .style("font-size",20 +"px")
             .text(function(d) { return d; })
         
         dispatch.on("statechange.menu", function(state) {
@@ -768,13 +768,13 @@ class temp:
           .attr("y", -margin.bottom/1.5 )
           .attr("transform", "rotate(-90)")
       svg.append("text").attr("class", "y label") 
-          .attr("transform", "translate("+-margin.left/2 +","+ height/2 + ")rotate(-90)")
+          .attr("transform", "translate("+-margin.left/4 +","+ height/2 + ")rotate(-90)")
           .attr("text-anchor", "middle") 
           .style("font-size", fontsize_label_y)
           .text(yaxis_lbl)
 
       svg.append("text").attr("class", "y label") 
-          .attr("transform", "translate("+width/2 +","+ (height+(Bottom/2)) + ")rotate(0)")
+          .attr("transform", "translate("+width/2 +","+ (height+(Bottom/4)) + ")rotate(0)")
           .attr("text-anchor", "middle") 
           .style("font-size", fontsize_label_x)
           .text(xaxis_lbl)
